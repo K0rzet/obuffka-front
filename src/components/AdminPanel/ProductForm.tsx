@@ -21,17 +21,21 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
     });
     
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [selectedSizes, setSelectedSizes] = useState<string>(
+        shoe?.sizes ? shoe.sizes.join(',') : ''
+    );
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const form = new FormData();
         
-        // Добавляем все поля в FormData
-        Object.entries(formData).forEach(([key, value]) => {
-            if (key !== 'images') {
-                form.append(key, typeof value === 'object' ? JSON.stringify(value) : String(value));
-            }
-        });
+        // Правильно формируем данные
+        form.append('name', formData.name || '');
+        form.append('description', formData.description || '');
+        form.append('color', formData.color || '');
+        form.append('gender', formData.gender || Gender.MALE);
+        form.append('sizes', JSON.stringify(selectedSizes.split(',').map(Number).filter(Boolean)));
+        form.append('price', String(formData.price || 0));
 
         // Добавляем файлы изображений
         if (fileInputRef.current?.files) {
@@ -50,21 +54,25 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                 placeholder="Название"
                 value={formData.name || ''}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
+                required
             />
             <textarea
                 placeholder="Описание"
                 value={formData.description || ''}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
+                required
             />
             <input
                 type="text"
                 placeholder="Цвет"
                 value={formData.color || ''}
                 onChange={e => setFormData({ ...formData, color: e.target.value })}
+                required
             />
             <select
                 value={formData.gender}
                 onChange={e => setFormData({ ...formData, gender: e.target.value as Gender })}
+                required
             >
                 <option value={Gender.MALE}>Мужское</option>
                 <option value={Gender.FEMALE}>Женское</option>
@@ -72,14 +80,16 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
             <input
                 type="text"
                 placeholder="Размеры (через запятую)"
-                value={formData.sizes?.join(',') || ''}
-                onChange={e => setFormData({ ...formData, sizes: e.target.value.split(',').map(Number) })}
+                value={selectedSizes}
+                onChange={e => setSelectedSizes(e.target.value)}
+                required
             />
             <input
                 type="number"
                 placeholder="Цена"
                 value={formData.price || ''}
                 onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
+                required
             />
             <div className={styles.imageUpload}>
                 <label>Изображения:</label>
