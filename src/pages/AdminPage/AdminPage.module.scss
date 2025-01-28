@@ -1,0 +1,71 @@
+.adminPage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        button {
+            background: #FD9BBD;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    }
+
+    .productList {
+        display: grid;
+        gap: 16px;
+
+        .productItem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+            .actions {
+                display: flex;
+                gap: 8px;
+
+                button {
+                    padding: 6px 12px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+
+                    &:first-child {
+                        background: #f5f5f5;
+                        color: #666;
+                    }
+
+                    &:last-child {
+                        background: #ff4d4d;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+} 

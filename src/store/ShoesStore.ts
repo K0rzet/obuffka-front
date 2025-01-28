@@ -62,6 +62,45 @@ class ShoesStore {
             });
         }
     }
+
+    async createShoe(data: Partial<Shoe>) {
+        try {
+            const response = await axiosInstance.post<Shoe>('/shoes', data);
+            runInAction(() => {
+                this.shoes.push(response.data);
+            });
+        } catch (error) {
+            console.error('Ошибка при создании товара:', error);
+            throw error;
+        }
+    }
+
+    async updateShoe(id: number, data: Partial<Shoe>) {
+        try {
+            const response = await axiosInstance.put<Shoe>(`/shoes/${id}`, data);
+            runInAction(() => {
+                const index = this.shoes.findIndex(shoe => shoe.id === id);
+                if (index !== -1) {
+                    this.shoes[index] = response.data;
+                }
+            });
+        } catch (error) {
+            console.error('Ошибка при обновлении товара:', error);
+            throw error;
+        }
+    }
+
+    async deleteShoe(id: number) {
+        try {
+            await axiosInstance.delete(`/shoes/${id}`);
+            runInAction(() => {
+                this.shoes = this.shoes.filter(shoe => shoe.id !== id);
+            });
+        } catch (error) {
+            console.error('Ошибка при удалении товара:', error);
+            throw error;
+        }
+    }
 }
 
 export const shoesStore = new ShoesStore(); 
