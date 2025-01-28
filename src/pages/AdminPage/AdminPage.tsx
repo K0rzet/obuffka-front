@@ -39,10 +39,10 @@ const AdminPage: React.FC = observer(() => {
             </div>
 
             {(isCreating || editingShoe) && (
-                <div className={styles.modal}>
-                    <ProductForm
-                        shoe={editingShoe || undefined}
-                        onSubmit={async (data) => {
+                <ProductForm
+                    shoe={editingShoe || undefined}
+                    onSubmit={async (data) => {
+                        try {
                             if (editingShoe) {
                                 await shoesStore.updateShoe(editingShoe.id, data);
                             } else {
@@ -50,13 +50,15 @@ const AdminPage: React.FC = observer(() => {
                             }
                             setEditingShoe(null);
                             setIsCreating(false);
-                        }}
-                        onCancel={() => {
-                            setEditingShoe(null);
-                            setIsCreating(false);
-                        }}
-                    />
-                </div>
+                        } catch (error) {
+                            console.error('Ошибка:', error);
+                        }
+                    }}
+                    onCancel={() => {
+                        setEditingShoe(null);
+                        setIsCreating(false);
+                    }}
+                />
             )}
 
             <div className={styles.productList}>
