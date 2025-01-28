@@ -17,22 +17,23 @@ class AuthStore {
         this.error = null;
         
         try {
-            // Проверяем, запущено ли приложение в Telegram WebApp
             if (!window.Telegram?.WebApp) {
                 throw new Error('Приложение должно быть запущено в Telegram');
             }
 
             const launchParams = retrieveLaunchParams();
-            console.log('Launch params:', launchParams); // для отладки
+            console.log('WebApp Data:', window.Telegram.WebApp.initData);
+            console.log('Launch Params:', launchParams);
+            console.log('Raw Init Data:', launchParams.initDataRaw);
             
-            if (!launchParams.initDataRaw) {
-                throw new Error('Отсутствуют данные инициализации Telegram');
-            }
-
-            const response = await axiosInstance.post<LoginResponse>('/auth/login', {
-                initData: launchParams.initDataRaw
-            });
-
+            const payload = {
+                initData: launchParams.initDataRaw || window.Telegram.WebApp.initData
+            };
+            
+            console.log('Отправляемый payload:', payload);
+            
+            const response = await axiosInstance.post<LoginResponse>('/auth/login', payload);
+            
             runInAction(() => {
                 this.user = response.data.user;
                 localStorage.setItem('token', response.data.token);
