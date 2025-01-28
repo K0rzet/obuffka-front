@@ -1,0 +1,38 @@
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    .title {
+        color: #333;
+        margin: 0 0 8px;
+        font-size: 18px;
+    }
+    
+    .description {
+        color: #666;
+        margin: 0 0 16px;
+        font-size: 14px;
+    }
+    
+    .info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    
+    .price {
+        font-weight: bold;
+        color: #FD9BBD;
+    }
+    
+    .color {
+        color: #666;
+    }
+    
+    .sizes {
+        font-size: 14px;
+        color: #666;
+    }
+} 
