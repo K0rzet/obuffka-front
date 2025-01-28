@@ -10,7 +10,7 @@
         border-radius: 4px;
         background: white;
         cursor: pointer;
-        color: #666;
+        color: var(--tg-theme-hint-color, #666);
 
         &:disabled {
             opacity: 0.5;
@@ -18,12 +18,12 @@
         }
 
         &.active {
-            background: #FD9BBD;
+            background: var(--primary-color);
             color: white;
         }
 
         &.arrow {
-            background: #f5f5f5;
+            background: var(--tg-theme-bg-color, #f5f5f5);
         }
     }
 } 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styles from './ShoeCard.module.scss';
 import { Shoe } from '../../types/shoe';
 
@@ -7,8 +7,35 @@ interface ShoeCardProps {
 }
 
 const ShoeCard: React.FC<ShoeCardProps> = ({ shoe }) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const scrollContainer = scrollRef.current;
+        if (!scrollContainer) return;
+
+        const handleWheel = (e: WheelEvent) => {
+            e.preventDefault();
+            scrollContainer.scrollLeft += e.deltaY;
+        };
+
+        scrollContainer.addEventListener('wheel', handleWheel);
+        return () => scrollContainer.removeEventListener('wheel', handleWheel);
+    }, []);
+
     return (
         <div className={styles.card}>
+            {shoe.images && shoe.images.length > 0 && (
+                <div className={styles.imageScroller} ref={scrollRef}>
+                    {shoe.images.map((image, index) => (
+                        <img 
+                            key={index}
+                            src={image}
+                            alt={`${shoe.name} ${index + 1}`}
+                            className={styles.image}
+                        />
+                    ))}
+                </div>
+            )}
             <h3 className={styles.title}>{shoe.name}</h3>
             <p className={styles.description}>{shoe.description}</p>
             <div className={styles.info}>

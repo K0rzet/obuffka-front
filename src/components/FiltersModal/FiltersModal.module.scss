@@ -62,16 +62,16 @@
 
             .colorLabel {
                 color: var(--tg-theme-text-color, #333);
-                background: var(--tg-theme-secondary-bg-color, white);
+                background: var(--tg-theme-secondary-bg-color, #680795);
             }
 
             .sizeLabel {
                 color: var(--tg-theme-text-color, #333);
-                background: var(--tg-theme-secondary-bg-color, white);
+                background: var(--tg-theme-secondary-bg-color, #680795);
             }
 
             input[type="number"] {
-                background: var(--tg-theme-secondary-bg-color, white);
+                background: var(--tg-theme-secondary-bg-color, #680795);
                 color: var(--tg-theme-text-color, #333);
             }
         }
@@ -85,7 +85,7 @@
                 padding: 12px 24px;
                 border: 2px solid var(--primary-color);
                 border-radius: 8px;
-                background: var(--tg-theme-bg-color, white);
+                background: var(--tg-theme-bg-color, #680795);
                 color: var(--primary-color);
                 font-weight: 500;
                 cursor: pointer;
@@ -117,14 +117,14 @@
                 transition: background 0.2s ease;
 
                 &:hover {
-                    background: #f5f5f5;
+                    background: #680795;
                 }
 
                 .colorBox {
                     width: 24px;
                     height: 24px;
                     border-radius: 6px;
-                    border: 2px solid #eee;
+                    border: 2px solid #680795;
                     transition: transform 0.2s ease;
 
                     &:hover {

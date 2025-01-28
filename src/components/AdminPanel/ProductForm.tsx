@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Shoe, Gender } from '../../types/shoe';
 import styles from './ProductForm.module.scss';
 
 interface ProductFormProps {
     shoe?: Shoe;
-    onSubmit: (data: Partial<Shoe>) => void;
+    onSubmit: (data: FormData) => void;
     onCancel: () => void;
 }
 
@@ -16,12 +16,31 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
         color: '',
         gender: Gender.MALE,
         sizes: [],
-        price: 0
+        price: 0,
+        images: []
     });
+    
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formData);
+        const form = new FormData();
+        
+        // Добавляем все поля в FormData
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key !== 'images') {
+                form.append(key, typeof value === 'object' ? JSON.stringify(value) : String(value));
+            }
+        });
+
+        // Добавляем файлы изображений
+        if (fileInputRef.current?.files) {
+            Array.from(fileInputRef.current.files).forEach(file => {
+                form.append('images', file);
+            });
+        }
+
+        onSubmit(form);
     };
 
     return (
@@ -62,6 +81,27 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                 value={formData.price || ''}
                 onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
             />
+            <div className={styles.imageUpload}>
+                <label>Изображения:</label>
+                <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    ref={fileInputRef}
+                />
+                {shoe?.images && (
+                    <div className={styles.currentImages}>
+                        {shoe.images.map((image, index) => (
+                            <img 
+                                key={index} 
+                                src={image} 
+                                alt={`Product ${index + 1}`} 
+                                className={styles.thumbnail}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
             <div className={styles.buttons}>
                 <button type="submit">{shoe ? 'Сохранить' : 'Создать'}</button>
                 <button type="button" onClick={onCancel}>Отмена</button>

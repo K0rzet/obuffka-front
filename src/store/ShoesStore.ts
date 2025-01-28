@@ -67,9 +67,13 @@ class ShoesStore {
         }
     }
 
-    async createShoe(data: Partial<Shoe>) {
+    async createShoe(data: FormData) {
         try {
-            const response = await axiosInstance.post<Shoe>('/shoes', data);
+            const response = await axiosInstance.post<Shoe>('/shoes', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             runInAction(() => {
                 this.shoes.push(response.data);
             });
@@ -79,9 +83,13 @@ class ShoesStore {
         }
     }
 
-    async updateShoe(id: number, data: Partial<Shoe>) {
+    async updateShoe(id: number, data: FormData) {
         try {
-            const response = await axiosInstance.put<Shoe>(`/shoes/${id}`, data);
+            const response = await axiosInstance.put<Shoe>(`/shoes/${id}`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             runInAction(() => {
                 const index = this.shoes.findIndex(shoe => shoe.id === id);
                 if (index !== -1) {

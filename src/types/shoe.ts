@@ -16,6 +16,7 @@ export interface Shoe {
     gender: Gender;
     sizes: number[];
     price: number;
+    images: string[];
 }
 
 export interface ShoeFilters {
