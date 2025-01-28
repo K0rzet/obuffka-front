@@ -36,6 +36,7 @@ const ShoeCard: React.FC<ShoeCardProps> = ({ shoe }) => {
                             src={getImageUrl(image)}
                             alt={`${shoe.name} ${index + 1}`}
                             className={styles.image}
+                            draggable={false}
                         />
                     ))}
                 </div>
