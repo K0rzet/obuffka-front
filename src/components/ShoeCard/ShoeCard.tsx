@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styles from './ShoeCard.module.scss';
 import { Shoe } from '../../types/shoe';
+import { getImageUrl } from '../../utils/imageUtils';
 
 interface ShoeCardProps {
     shoe: Shoe;
@@ -14,8 +15,20 @@ const ShoeCard: React.FC<ShoeCardProps> = ({ shoe }) => {
         if (!scrollContainer) return;
 
         const handleWheel = (e: WheelEvent) => {
-            e.preventDefault();
-            scrollContainer.scrollLeft += e.deltaY;
+            // Если зажат Shift или это горизонтальный скролл, позволяем браузеру обработать событие
+            if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                return;
+            }
+
+            // Проверяем, есть ли возможность горизонтальной прокрутки
+            const canScrollLeft = scrollContainer.scrollLeft > 0;
+            const canScrollRight = scrollContainer.scrollLeft < scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+            // Если есть возможность прокрутки в направлении скролла
+            if ((e.deltaY < 0 && canScrollLeft) || (e.deltaY > 0 && canScrollRight)) {
+                e.preventDefault();
+                scrollContainer.scrollLeft += e.deltaY;
+            }
         };
 
         scrollContainer.addEventListener('wheel', handleWheel);
@@ -29,7 +42,7 @@ const ShoeCard: React.FC<ShoeCardProps> = ({ shoe }) => {
                     {shoe.images.map((image, index) => (
                         <img 
                             key={index}
-                            src={image}
+                            src={getImageUrl(image)}
                             alt={`${shoe.name} ${index + 1}`}
                             className={styles.image}
                         />
