@@ -17,9 +17,17 @@ class AuthStore {
         this.error = null;
         
         try {
-            if (!window.Telegram?.WebApp) {
-                throw new Error('Приложение должно быть запущено в Telegram');
-            }
+            // Ждем инициализацию Telegram WebApp
+            await new Promise<void>((resolve) => {
+                if (window.Telegram?.WebApp) {
+                    resolve();
+                } else {
+                    const script = document.createElement('script');
+                    script.src = 'https://telegram.org/js/telegram-web-app.js';
+                    script.onload = () => resolve();
+                    document.head.appendChild(script);
+                }
+            });
 
             const launchParams = retrieveLaunchParams();
             console.log('WebApp Data:', window.Telegram.WebApp.initData);
