@@ -10,6 +10,11 @@ class AuthStore {
 
     constructor() {
         makeAutoObservable(this);
+        // Проверяем токен при инициализации
+        const token = localStorage.getItem('token');
+        if (token) {
+            this.fetchCurrentUser();
+        }
     }
 
     async initAuth() {
@@ -17,37 +22,46 @@ class AuthStore {
         this.error = null;
         
         try {
-            // Ждем инициализацию Telegram WebApp
             await new Promise<void>((resolve) => {
                 if (window.Telegram?.WebApp) {
+                    console.log('Telegram WebApp уже инициализирован');
                     resolve();
                 } else {
+                    console.log('Загружаем Telegram WebApp скрипт');
                     const script = document.createElement('script');
                     script.src = 'https://telegram.org/js/telegram-web-app.js';
-                    script.onload = () => resolve();
+                    script.onload = () => {
+                        console.log('Telegram WebApp скрипт загружен');
+                        resolve();
+                    };
                     document.head.appendChild(script);
                 }
             });
 
             const launchParams = retrieveLaunchParams();
-            console.log('WebApp Data:', window.Telegram?.WebApp?.initData);
-            console.log('Launch Params:', launchParams);
-            console.log('Raw Init Data:', launchParams.initDataRaw);
-            const payload = {
-                initData: launchParams.initDataRaw || window.Telegram?.WebApp?.initData
-            };
+            const initData = launchParams.initDataRaw || window.Telegram?.WebApp?.initData;
             
-            console.log('Отправляемый payload:', payload);
-            const response = await axiosInstance.post<LoginResponse>('/auth/login', payload);
+            console.log('Launch Params:', launchParams);
+            console.log('Init Data:', initData);
+            
+            if (!initData) {
+                throw new Error('Отсутствуют данные инициализации Telegram');
+            }
+
+            const response = await axiosInstance.post<LoginResponse>('/auth/login', {
+                initData
+            });
+            
+            console.log('Ответ сервера:', response.data);
             
             runInAction(() => {
                 this.user = response.data.user;
                 localStorage.setItem('token', response.data.token);
             });
         } catch (error) {
+            console.error('Ошибка авторизации:', error);
             runInAction(() => {
                 this.error = 'Ошибка авторизации';
-                console.error(error);
             });
         } finally {
             runInAction(() => {

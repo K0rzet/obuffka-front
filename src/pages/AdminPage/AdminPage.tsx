@@ -12,9 +12,27 @@ const AdminPage: React.FC = observer(() => {
 
     useEffect(() => {
         shoesStore.fetchShoes();
+        if (!authStore.user) {
+            console.log('Пользователь не авторизован, запускаем initAuth');
+            authStore.initAuth();
+        } else {
+            console.log('Текущий пользователь:', authStore.user);
+        }
     }, []);
 
-    if (!authStore.user?.isAdmin) {
+    if (authStore.isLoading) {
+        return <div>Загрузка...</div>;
+    }
+
+    if (authStore.error) {
+        return <div className={styles.error}>{authStore.error}</div>;
+    }
+
+    if (!authStore.user) {
+        return <div className={styles.error}>Необходима авторизация</div>;
+    }
+
+    if (!authStore.user.isAdmin) {
         return <div className={styles.error}>Доступ запрещен</div>;
     }
 
