@@ -6,23 +6,35 @@
 
     .header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        gap: 15px;
         margin-bottom: 30px;
+        
+        @media (min-width: 768px) {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
         
         h1 {
             color: var(--tg-theme-text-color, #333);
-            margin-bottom: 20px;
+            margin: 0;
+            font-size: 24px;
         }
 
         button {
             background: var(--primary-color);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
+            width: 100%;
+
+            @media (min-width: 768px) {
+                width: auto;
+            }
 
             &:hover {
                 background: var(--primary-hover);
@@ -36,43 +48,61 @@
 
         .productItem {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 15px;
             padding: 15px;
             background: var(--tg-theme-secondary-bg-color, white);
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
-            color: var(--tg-theme-text-color, #333);
+            
+            @media (min-width: 768px) {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
 
             .productInfo {
                 h3 {
-                    color: var(--tg-theme-text-color, #333);
+                    margin: 0 0 8px;
+                    font-size: 18px;
                 }
 
                 p {
-                    color: var(--tg-theme-hint-color, #666);
+                    margin: 0;
+                    color: var(--tg-theme-hint-color);
                 }
             }
 
             .actions {
                 display: flex;
-                gap: 8px;
+                gap: 10px;
+                width: 100%;
+
+                @media (min-width: 768px) {
+                    width: auto;
+                }
 
                 button {
-                    padding: 6px 12px;
+                    flex: 1;
+                    padding: 8px 16px;
                     border: none;
-                    border-radius: 4px;
+                    border-radius: 6px;
                     cursor: pointer;
+                    transition: all 0.2s ease;
+
+                    @media (min-width: 768px) {
+                        flex: none;
+                    }
 
                     &:first-child {
-                        background: #f5f5f5;
-                        color: #666;
+                        background: var(--tg-theme-button-color, #2481cc);
+                        color: var(--tg-theme-button-text-color, white);
                     }
 
                     &:last-child {
-                        background: #ff4d4d;
-                        color: white;
+                        background: var(--tg-theme-secondary-bg-color);
+                        color: #ff4d4d;
+                        border: 1px solid #ff4d4d;
                     }
                 }
             }
@@ -93,8 +123,11 @@
     }
 
     .error {
-        color: var(--tg-theme-text-color, #ff4444);
         text-align: center;
+        color: #ff4d4d;
         padding: 20px;
+        background: var(--tg-theme-secondary-bg-color);
+        border-radius: 8px;
+        margin: 20px 0;
     }
 } 
