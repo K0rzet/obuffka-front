@@ -6,6 +6,7 @@ import ShoeCard from '../../components/ShoeCard/ShoeCard';
 import Pagination from '../../components/Pagination/Pagination';
 import FiltersModal from '../../components/FiltersModal/FiltersModal';
 import styles from './HomePage.module.scss';
+import { SortOrder } from '../../types/shoe';
 
 const HomePage: React.FC = observer(() => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -20,12 +21,22 @@ const HomePage: React.FC = observer(() => {
 
     return (
         <div className={styles.container}>
-            <button 
-                className={styles.filterButton}
-                onClick={() => setIsFiltersOpen(true)}
-            >
-                Фильтры
-            </button>
+            <div className={styles.header}>
+                <select 
+                    className={styles.select}
+                    value={shoesStore.filters.priceSort}
+                    onChange={(e) => shoesStore.setFilter('priceSort', e.target.value as SortOrder)}
+                >
+                    <option value={SortOrder.ASC}>Сначала дешевле</option>
+                    <option value={SortOrder.DESC}>Сначала дороже</option>
+                </select>
+                <button 
+                    className={styles.filterButton}
+                    onClick={() => setIsFiltersOpen(true)}
+                >
+                    Фильтры
+                </button>
+            </div>
             
             {isFiltersOpen && (
                 <FiltersModal onClose={() => setIsFiltersOpen(false)} />
@@ -36,6 +47,7 @@ const HomePage: React.FC = observer(() => {
                     <ShoeCard key={shoe.id} shoe={shoe} />
                 ))}
             </div>
+            
             <Pagination 
                 currentPage={shoesStore.page}
                 totalPages={shoesStore.totalPages}

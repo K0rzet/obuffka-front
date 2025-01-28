@@ -1,224 +1,99 @@
-.modal {
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 1000;
+    padding: 20px;
+}
+
+.modal {
+    background: var(--tg-theme-bg-color);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
     overflow-y: auto;
-    animation: fadeIn 0.3s ease;
+    padding: 20px;
 
-    .content {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 30px;
-        background: var(--tg-theme-bg-color, white);
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        position: relative;
-        animation: slideIn 0.3s ease;
-        color: var(--tg-theme-text-color, #333);
-
-        .closeButton {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-
-            &:hover {
-                background: #f5f5f5;
-                transform: rotate(90deg);
-            }
-        }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
 
         h2 {
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 24px;
-            font-weight: 600;
+            margin: 0;
+            font-size: 20px;
         }
 
-        .section {
-            margin-bottom: 40px;
-            animation: fadeIn 0.4s ease;
+        .closeButton {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--tg-theme-text-color);
+        }
+    }
 
-            h3 {
-                margin-bottom: 20px;
-                color: var(--tg-theme-text-color, #666);
-                font-size: 18px;
-                font-weight: 500;
-            }
+    .section {
+        margin-bottom: 24px;
 
-            .colorLabel {
-                color: var(--tg-theme-text-color, #333);
-                background: var(--tg-theme-secondary-bg-color, #680795);
-            }
-
-            .sizeLabel {
-                color: var(--tg-theme-text-color, #333);
-                background: var(--tg-theme-secondary-bg-color, #680795);
-            }
-
-            input[type="number"] {
-                background: var(--tg-theme-secondary-bg-color, #680795);
-                color: var(--tg-theme-text-color, #333);
-            }
+        h3 {
+            margin: 0 0 12px;
+            font-size: 16px;
         }
 
-        .genderButtons {
-            display: flex;
-            gap: 15px;
-
-            button {
-                flex: 1;
-                padding: 12px 24px;
-                border: 2px solid var(--primary-color);
-                border-radius: 8px;
-                background: var(--tg-theme-bg-color, #680795);
-                color: var(--primary-color);
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.2s ease;
-
-                &:hover {
-                    background: var(--primary-light);
-                }
-
-                &.active {
-                    background: var(--primary-color);
-                    color: white;
-                }
-            }
-        }
-
-        .colors {
+        .colorGrid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-
-            .colorLabel {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 10px;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background 0.2s ease;
-
-                &:hover {
-                    background: #680795;
-                }
-
-                .colorBox {
-                    width: 24px;
-                    height: 24px;
-                    border-radius: 6px;
-                    border: 2px solid #680795;
-                    transition: transform 0.2s ease;
-
-                    &:hover {
-                        transform: scale(1.1);
-                    }
-                }
-
-                input {
-                    width: 18px;
-                    height: 18px;
-                    cursor: pointer;
-                }
-            }
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
         }
 
-        .sizes {
+        .sizeGrid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+        }
 
-            .sizeLabel {
+        .priceRange {
+            padding: 0 10px;
+            margin-bottom: 20px;
+
+            .values {
                 display: flex;
-                align-items: center;
-                gap: 10px;
-                padding: 10px;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background 0.2s ease;
-
-                &:hover {
-                    background: #f5f5f5;
-                }
-
-                input {
-                    width: 18px;
-                    height: 18px;
-                    cursor: pointer;
-                }
+                justify-content: space-between;
+                margin-top: 10px;
+                font-size: 14px;
             }
         }
+    }
 
-        .priceInputs {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
+    .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
 
-            input {
-                flex: 1;
-                padding: 12px;
-                border: 2px solid #eee;
-                border-radius: 8px;
-                font-size: 16px;
-                transition: border-color 0.2s ease;
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
 
-                &:focus {
-                    border-color: #FD9BBD;
-                    outline: none;
-                }
+            &.apply {
+                background: var(--primary-color);
+                color: white;
             }
-        }
 
-        .buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 40px;
-
-            button {
-                padding: 12px 30px;
-                border: none;
-                border-radius: 8px;
-                font-size: 16px;
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.2s ease;
-
-                &:first-child {
-                    background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-                    color: var(--tg-theme-text-color, #666);
-
-                    &:hover {
-                        background: #eee;
-                    }
-                }
-
-                &:last-child {
-                    background: #FD9BBD;
-                    color: white;
-
-                    &:hover {
-                        background: darken(#FD9BBD, 5%);
-                        transform: translateY(-2px);
-                    }
-                }
+            &.reset {
+                background: var(--tg-theme-secondary-bg-color);
+                color: var(--tg-theme-text-color);
             }
         }
     }
