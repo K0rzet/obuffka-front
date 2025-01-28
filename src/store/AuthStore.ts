@@ -30,16 +30,14 @@ class AuthStore {
             });
 
             const launchParams = retrieveLaunchParams();
-            console.log('WebApp Data:', window.Telegram.WebApp.initData);
+            console.log('WebApp Data:', window.Telegram?.WebApp?.initData);
             console.log('Launch Params:', launchParams);
             console.log('Raw Init Data:', launchParams.initDataRaw);
-            
             const payload = {
-                initData: launchParams.initDataRaw || window.Telegram.WebApp.initData
+                initData: launchParams.initDataRaw || window.Telegram?.WebApp?.initData
             };
             
             console.log('Отправляемый payload:', payload);
-            
             const response = await axiosInstance.post<LoginResponse>('/auth/login', payload);
             
             runInAction(() => {
