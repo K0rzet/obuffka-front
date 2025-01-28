@@ -1,0 +1,21 @@
+.app {
+  padding: 16px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.main {
+  width: 100%;
+} 
