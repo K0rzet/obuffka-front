@@ -5,6 +5,7 @@ import { authStore } from '../../store/AuthStore';
 import ProductForm from '../../components/AdminPanel/ProductForm';
 import { Shoe } from '../../types/shoe';
 import styles from './AdminPage.module.scss';
+import Pagination from '../../components/Pagination/Pagination';
 
 const AdminPage: React.FC = observer(() => {
     const [editingShoe, setEditingShoe] = useState<Shoe | null>(null);
@@ -72,6 +73,11 @@ const AdminPage: React.FC = observer(() => {
                     </div>
                 ))}
             </div>
+            <Pagination 
+                currentPage={shoesStore.page}
+                totalPages={shoesStore.totalPages}
+                onPageChange={(page) => shoesStore.setPage(page)}
+            />
         </div>
     );
 });
