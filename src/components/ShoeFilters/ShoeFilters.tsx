@@ -30,19 +30,6 @@ const ShoeFilters: React.FC = observer(() => {
                 <option value={SortOrder.ASC}>Сначала дешевле</option>
                 <option value={SortOrder.DESC}>Сначала дороже</option>
             </select>
-
-            <div className={styles.colors}>
-                {['Белый', 'Черный', 'Красный'].map(color => (
-                    <label key={color} className={styles.colorLabel}>
-                        <input
-                            type="checkbox"
-                            checked={shoesStore.filters.color === color}
-                            onChange={() => shoesStore.setFilter('color', color)}
-                        />
-                        {color}
-                    </label>
-                ))}
-            </div>
         </div>
     );
 });

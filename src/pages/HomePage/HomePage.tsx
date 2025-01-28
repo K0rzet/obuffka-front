@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { shoesStore } from '../../store/ShoesStore';
-import ShoeFilters from '../../components/ShoeFilters/ShoeFilters';
+
 import ShoeCard from '../../components/ShoeCard/ShoeCard';
 import Pagination from '../../components/Pagination/Pagination';
+import FiltersModal from '../../components/FiltersModal/FiltersModal';
 import styles from './HomePage.module.scss';
 
 const HomePage: React.FC = observer(() => {
+    const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
     useEffect(() => {
         shoesStore.fetchShoes();
     }, []);
@@ -17,7 +20,17 @@ const HomePage: React.FC = observer(() => {
 
     return (
         <div className={styles.container}>
-            <ShoeFilters />
+            <button 
+                className={styles.filterButton}
+                onClick={() => setIsFiltersOpen(true)}
+            >
+                Фильтры
+            </button>
+            
+            {isFiltersOpen && (
+                <FiltersModal onClose={() => setIsFiltersOpen(false)} />
+            )}
+
             <div className={styles.grid}>
                 {shoesStore.shoes.map(shoe => (
                     <ShoeCard key={shoe.id} shoe={shoe} />

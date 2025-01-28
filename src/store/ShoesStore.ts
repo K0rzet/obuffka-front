@@ -37,7 +37,11 @@ class ShoesStore {
             Object.entries(this.filters).forEach(([key, value]) => {
                 if (value !== undefined) {
                     if (Array.isArray(value)) {
-                        queryParams.append(key, value.join(','));
+                        if (key === 'colors') {
+                            queryParams.append(key, value.join(','));
+                        } else if (key === 'sizes') {
+                            queryParams.append(key, value.join(','));
+                        }
                     } else {
                         queryParams.append(key, String(value));
                     }
@@ -100,6 +104,15 @@ class ShoesStore {
             console.error('Ошибка при удалении товара:', error);
             throw error;
         }
+    }
+
+    resetFilters() {
+        this.filters = {
+            gender: Gender.MALE,
+            priceSort: SortOrder.ASC
+        };
+        this.page = 1;
+        this.fetchShoes();
     }
 }
 

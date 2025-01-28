@@ -21,7 +21,7 @@ export interface Shoe {
 export interface ShoeFilters {
     name?: string;
     description?: string;
-    color?: string;
+    colors?: string[];
     gender?: Gender;
     sizes?: number[];
     minPrice?: number;
