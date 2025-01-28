@@ -51,30 +51,32 @@
         h3 {
             margin: 0 0 12px;
             font-size: 16px;
+            color: var(--tg-theme-text-color);
         }
 
-        .priceInputs {
+        .genderButtons {
             display: flex;
             gap: 10px;
-            margin: 15px 0;
+            margin-bottom: 20px;
 
-            .inputGroup {
+            button {
                 flex: 1;
-                
-                label {
-                    display: block;
-                    margin-bottom: 5px;
-                    font-size: 14px;
-                    color: var(--tg-theme-hint-color);
+                padding: 12px;
+                border: 1px solid var(--tg-theme-hint-color);
+                border-radius: 8px;
+                background: var(--tg-theme-secondary-bg-color);
+                color: var(--tg-theme-text-color);
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: var(--tg-theme-hint-color);
                 }
 
-                input {
-                    width: 100%;
-                    padding: 8px;
-                    border: 1px solid var(--tg-theme-hint-color);
-                    border-radius: 8px;
-                    background: var(--tg-theme-secondary-bg-color);
-                    color: var(--tg-theme-text-color);
+                &.active {
+                    background: var(--primary-color);
+                    color: white;
+                    border-color: var(--primary-color);
                 }
             }
         }
@@ -98,6 +100,11 @@
                 cursor: pointer;
                 border: 1px solid var(--tg-theme-hint-color);
                 background: var(--tg-theme-secondary-bg-color);
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: var(--tg-theme-hint-color);
+                }
 
                 &.active {
                     border-color: var(--primary-color);
@@ -105,8 +112,8 @@
                 }
 
                 .colorSwatch {
-                    width: 24px;
-                    height: 24px;
+                    width: 20px;
+                    height: 20px;
                     border-radius: 4px;
                     border: 1px solid var(--tg-theme-hint-color);
                     flex-shrink: 0;
@@ -115,13 +122,7 @@
                 .colorName {
                     font-size: 14px;
                     flex-grow: 1;
-                }
-
-                input[type="checkbox"] {
-                    margin: 0;
-                    width: 18px;
-                    height: 18px;
-                    flex-shrink: 0;
+                    color: var(--tg-theme-text-color);
                 }
             }
         }
@@ -136,27 +137,70 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 8px;
+                padding: 12px;
                 border: 1px solid var(--tg-theme-hint-color);
                 border-radius: 8px;
                 cursor: pointer;
                 user-select: none;
+                background: var(--tg-theme-secondary-bg-color);
+                transition: all 0.2s ease;
 
-                input {
-                    position: absolute;
-                    opacity: 0;
-                    cursor: pointer;
-                    height: 0;
-                    width: 0;
-
-                    &:checked + span {
-                        color: var(--primary-color);
-                    }
+                &:hover {
+                    background: var(--tg-theme-hint-color);
                 }
 
-                &:has(input:checked) {
+                &.active {
                     border-color: var(--primary-color);
-                    background: var(--tg-theme-secondary-bg-color);
+                    background: var(--tg-theme-bg-color);
+                    color: var(--primary-color);
+                }
+            }
+        }
+
+        .priceInputs {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+
+            input {
+                flex: 1;
+                padding: 12px;
+                border: 1px solid var(--tg-theme-hint-color);
+                border-radius: 8px;
+                background: var(--tg-theme-secondary-bg-color);
+                color: var(--tg-theme-text-color);
+                font-size: 14px;
+
+                &::placeholder {
+                    color: var(--tg-theme-hint-color);
+                }
+            }
+        }
+
+        :global {
+            .rc-slider {
+                margin: 30px 10px;
+                
+                .rc-slider-rail {
+                    background-color: var(--tg-theme-hint-color);
+                }
+                
+                .rc-slider-track {
+                    background-color: var(--primary-color);
+                }
+                
+                .rc-slider-handle {
+                    border-color: var(--primary-color);
+                    background-color: var(--tg-theme-bg-color);
+                    
+                    &:hover {
+                        border-color: var(--primary-hover);
+                    }
+                    
+                    &:active {
+                        border-color: var(--primary-hover);
+                        box-shadow: 0 0 5px var(--primary-color);
+                    }
                 }
             }
         }
@@ -176,16 +220,26 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
 
             &.apply {
                 background: var(--primary-color);
                 color: white;
+
+                &:hover {
+                    background: var(--primary-hover);
+                }
             }
 
             &.reset {
                 background: var(--tg-theme-secondary-bg-color);
                 color: var(--tg-theme-text-color);
                 border: 1px solid var(--tg-theme-hint-color);
+
+                &:hover {
+                    background: var(--tg-theme-hint-color);
+                }
             }
         }
     }
