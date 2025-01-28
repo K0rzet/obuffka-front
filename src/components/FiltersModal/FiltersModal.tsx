@@ -47,109 +47,117 @@ const FiltersModal: React.FC<FiltersModalProps> = observer(({ onClose }) => {
 
     return (
         <div className={styles.modal}>
-            <div className={styles.content}>
-                <button className={styles.closeButton} onClick={onClose}>×</button>
+            <div className={styles.header}>
                 <h2>Фильтры</h2>
+                <button className={styles.closeButton} onClick={onClose}>×</button>
+            </div>
 
-                <div className={styles.section}>
-                    <h3>Пол</h3>
-                    <div className={styles.genderButtons}>
-                        <button
-                            className={localFilters.gender === Gender.MALE ? styles.active : ''}
-                            onClick={() => setLocalFilters({ ...localFilters, gender: Gender.MALE })}
+            <div className={styles.section}>
+                <h3>Пол</h3>
+                <div className={styles.genderButtons}>
+                    <button
+                        className={localFilters.gender === Gender.MALE ? styles.active : ''}
+                        onClick={() => setLocalFilters({ ...localFilters, gender: Gender.MALE })}
+                    >
+                        Мужское
+                    </button>
+                    <button
+                        className={localFilters.gender === Gender.FEMALE ? styles.active : ''}
+                        onClick={() => setLocalFilters({ ...localFilters, gender: Gender.FEMALE })}
+                    >
+                        Женское
+                    </button>
+                </div>
+            </div>
+
+            <div className={styles.section}>
+                <h3>Цвета</h3>
+                <div className={styles.colorGrid}>
+                    {COLORS.map(color => (
+                        <div
+                            key={color.name}
+                            className={`${styles.colorOption} ${localFilters.colors?.includes(color.name) ? styles.active : ''}`}
+                            onClick={() => {
+                                const newColors = localFilters.colors?.includes(color.name)
+                                    ? (localFilters.colors || []).filter(c => c !== color.name)
+                                    : [...(localFilters.colors || []), color.name];
+                                setLocalFilters({ ...localFilters, colors: newColors });
+                            }}
                         >
-                            Мужское
-                        </button>
-                        <button
-                            className={localFilters.gender === Gender.FEMALE ? styles.active : ''}
-                            onClick={() => setLocalFilters({ ...localFilters, gender: Gender.FEMALE })}
+                            <input
+                                type="checkbox"
+                                checked={localFilters.colors?.includes(color.name)}
+                                onChange={() => {}}
+                            />
+                            <span className={styles.colorSwatch} style={{ backgroundColor: color.hex }} />
+                            <span className={styles.colorName}>{color.name}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className={styles.section}>
+                <h3>Размеры</h3>
+                <div className={styles.sizes}>
+                    {SIZES.map(size => (
+                        <div
+                            key={size}
+                            className={`${styles.sizeLabel} ${localFilters.sizes?.includes(size) ? styles.active : ''}`}
+                            onClick={() => {
+                                const newSizes = localFilters.sizes?.includes(size)
+                                    ? (localFilters.sizes || []).filter(s => s !== size)
+                                    : [...(localFilters.sizes || []), size];
+                                setLocalFilters({ ...localFilters, sizes: newSizes });
+                            }}
                         >
-                            Женское
-                        </button>
-                    </div>
+                            <input
+                                type="checkbox"
+                                checked={localFilters.sizes?.includes(size)}
+                                onChange={() => {}}
+                            />
+                            {size}
+                        </div>
+                    ))}
                 </div>
+            </div>
 
-                <div className={styles.section}>
-                    <h3>Цвета</h3>
-                    <div className={styles.colors}>
-                        {COLORS.map(color => (
-                            <label key={color.name} className={styles.colorLabel}>
-                                <input
-                                    type="checkbox"
-                                    checked={localFilters.colors?.includes(color.name)}
-                                    onChange={(e) => {
-                                        const newColors = e.target.checked
-                                            ? [...(localFilters.colors || []), color.name]
-                                            : (localFilters.colors || []).filter((c: string) => c !== color.name);
-                                        setLocalFilters({ ...localFilters, colors: newColors });
-                                    }}
-                                />
-                                <span className={styles.colorBox} style={{ backgroundColor: color.hex }} />
-                                {color.name}
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <div className={styles.section}>
-                    <h3>Размеры</h3>
-                    <div className={styles.sizes}>
-                        {SIZES.map(size => (
-                            <label key={size} className={styles.sizeLabel}>
-                                <input
-                                    type="checkbox"
-                                    checked={localFilters.sizes?.includes(size)}
-                                    onChange={(e) => {
-                                        const newSizes = e.target.checked
-                                            ? [...(localFilters.sizes || []), size]
-                                            : (localFilters.sizes || []).filter(s => s !== size);
-                                        setLocalFilters({ ...localFilters, sizes: newSizes });
-                                    }}
-                                />
-                                {size}
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <div className={styles.section}>
-                    <h3>Цена</h3>
-                    <div className={styles.priceInputs}>
-                        <input
-                            type="number"
-                            value={priceRange[0]}
-                            onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                            placeholder="От"
-                        />
-                        <input
-                            type="number"
-                            value={priceRange[1]}
-                            onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                            placeholder="До"
-                        />
-                    </div>
-                    <Slider
-                        range
-                        min={0}
-                        max={MAX_PRICE}
-                        value={priceRange}
-                        onChange={(value: number | number[]) => {
-                            if (Array.isArray(value) && value.length === 2) {
-                                setPriceRange([value[0], value[1]]);
-                                setLocalFilters({
-                                    ...localFilters,
-                                    minPrice: value[0],
-                                    maxPrice: value[1]
-                                });
-                            }
-                        }}
+            <div className={styles.section}>
+                <h3>Цена</h3>
+                <div className={styles.priceInputs}>
+                    <input
+                        type="number"
+                        value={priceRange[0]}
+                        onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                        placeholder="От"
+                    />
+                    <input
+                        type="number"
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                        placeholder="До"
                     />
                 </div>
+                <Slider
+                    range
+                    min={0}
+                    max={MAX_PRICE}
+                    value={priceRange}
+                    onChange={(value: number | number[]) => {
+                        if (Array.isArray(value) && value.length === 2) {
+                            setPriceRange([value[0], value[1]]);
+                            setLocalFilters({
+                                ...localFilters,
+                                minPrice: value[0],
+                                maxPrice: value[1]
+                            });
+                        }
+                    }}
+                />
+            </div>
 
-                <div className={styles.buttons}>
-                    <button onClick={handleReset}>Сбросить</button>
-                    <button onClick={handleApply}>Применить</button>
-                </div>
+            <div className={styles.buttons}>
+                <button className={styles.reset} onClick={handleReset}>Сбросить</button>
+                <button className={styles.apply} onClick={handleApply}>Применить</button>
             </div>
         </div>
     );
