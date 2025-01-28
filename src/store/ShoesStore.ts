@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import axiosInstance from '../api/axiosInstance';
-import { Shoe, ShoeFilters, ShoesResponse, Gender, SortOrder } from '../types/shoe';
+import { Shoe, ShoeFilters, ShoesResponse, SortOrder } from '../types/shoe';
 
 class ShoesStore {
     shoes: Shoe[] = [];
