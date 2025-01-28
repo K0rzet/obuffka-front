@@ -15,19 +15,10 @@ const ShoeCard: React.FC<ShoeCardProps> = ({ shoe }) => {
         if (!scrollContainer) return;
 
         const handleWheel = (e: WheelEvent) => {
-            // Если зажат Shift или это горизонтальный скролл, позволяем браузеру обработать событие
-            if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-                return;
-            }
-
-            // Проверяем, есть ли возможность горизонтальной прокрутки
-            const canScrollLeft = scrollContainer.scrollLeft > 0;
-            const canScrollRight = scrollContainer.scrollLeft < scrollContainer.scrollWidth - scrollContainer.clientWidth;
-
-            // Если есть возможность прокрутки в направлении скролла
-            if ((e.deltaY < 0 && canScrollLeft) || (e.deltaY > 0 && canScrollRight)) {
+            // Обрабатываем только горизонтальный скролл
+            if (Math.abs(e.deltaX) > 0) {
                 e.preventDefault();
-                scrollContainer.scrollLeft += e.deltaY;
+                scrollContainer.scrollLeft += e.deltaX;
             }
         };
 
