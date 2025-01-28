@@ -11,6 +11,19 @@ interface ProductFormProps {
     onCancel: () => void;
 }
 
+const COLORS = [
+    { name: 'Белый', hex: '#FFFFFF' },
+    { name: 'Черный', hex: '#000000' },
+    { name: 'Красный', hex: '#FF0000' },
+    { name: 'Синий', hex: '#0000FF' },
+    { name: 'Зеленый', hex: '#008000' },
+    { name: 'Желтый', hex: '#FFFF00' },
+    { name: 'Розовый', hex: '#FFC0CB' },
+    { name: 'Серый', hex: '#808080' },
+    { name: 'Коричневый', hex: '#8B4513' },
+    { name: 'Бежевый', hex: '#F5F5DC' }
+];
+
 const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCancel }) => {
     const [formData, setFormData] = useState<Partial<Shoe>>(shoe || {
         name: '',
@@ -91,13 +104,24 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                         onChange={e => setFormData({ ...formData, description: e.target.value })}
                         required
                     />
-                    <input
-                        type="text"
-                        placeholder="Цвет"
-                        value={formData.color || ''}
-                        onChange={e => setFormData({ ...formData, color: e.target.value })}
-                        required
-                    />
+                    <div className={styles.colorSection}>
+                        <label>Цвет:</label>
+                        <div className={styles.colorGrid}>
+                            {COLORS.map(color => (
+                                <div
+                                    key={color.name}
+                                    className={`${styles.colorOption} ${formData.color === color.name ? styles.active : ''}`}
+                                    onClick={() => setFormData({ ...formData, color: color.name })}
+                                >
+                                    <span 
+                                        className={styles.colorSwatch} 
+                                        style={{ backgroundColor: color.hex }}
+                                    />
+                                    <span className={styles.colorName}>{color.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                     <select
                         value={formData.gender}
                         onChange={e => setFormData({ ...formData, gender: e.target.value as Gender })}

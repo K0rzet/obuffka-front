@@ -7,7 +7,6 @@ class ShoesStore {
     isLoading: boolean = false;
     error: string | null = null;
     filters: ShoeFilters = {
-        gender: Gender.MALE,
         priceSort: SortOrder.ASC
     };
     page: number = 1;
@@ -34,12 +33,12 @@ class ShoesStore {
 
         try {
             const queryParams = new URLSearchParams();
+            
+            // Добавляем только установленные фильтры
             Object.entries(this.filters).forEach(([key, value]) => {
-                if (value !== undefined) {
+                if (value !== undefined && key !== 'priceSort') {
                     if (Array.isArray(value)) {
-                        if (key === 'colors') {
-                            queryParams.append(key, value.join(','));
-                        } else if (key === 'sizes') {
+                        if (value.length > 0) {
                             queryParams.append(key, value.join(','));
                         }
                     } else {
@@ -47,6 +46,9 @@ class ShoesStore {
                     }
                 }
             });
+
+            // Всегда добавляем сортировку и пагинацию
+            queryParams.append('priceSort', this.filters.priceSort || SortOrder.ASC);
             queryParams.append('page', String(this.page));
 
             const response = await axiosInstance.get<ShoesResponse>(`/shoes?${queryParams}`);
@@ -116,7 +118,6 @@ class ShoesStore {
 
     resetFilters() {
         this.filters = {
-            gender: Gender.MALE,
             priceSort: SortOrder.ASC
         };
         this.page = 1;

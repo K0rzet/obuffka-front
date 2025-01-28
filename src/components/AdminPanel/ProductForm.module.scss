@@ -81,4 +81,43 @@
             }
         }
     }
+}
+
+.colorSection {
+    margin: 20px 0;
+
+    .colorGrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .colorOption {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid var(--tg-theme-hint-color, #ddd);
+        transition: all 0.2s ease;
+
+        &.active {
+            background: var(--tg-theme-secondary-bg-color);
+            border-color: var(--primary-color);
+        }
+
+        .colorSwatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid var(--tg-theme-hint-color, #ddd);
+        }
+
+        .colorName {
+            font-size: 14px;
+            color: var(--tg-theme-text-color);
+        }
+    }
 } 
