@@ -12,6 +12,8 @@
 
         .select {
             flex: 1;
+            min-width: 150px;
+            max-width: 200px;
             padding: 8px;
             border: 1px solid var(--tg-theme-hint-color);
             border-radius: 8px;
@@ -20,13 +22,13 @@
         }
 
         .filterButton {
-            white-space: nowrap;
             padding: 8px 16px;
             border: 1px solid var(--tg-theme-hint-color);
             border-radius: 8px;
             background: var(--tg-theme-secondary-bg-color);
             color: var(--tg-theme-text-color);
             cursor: pointer;
+            white-space: nowrap;
 
             &:hover {
                 background: var(--tg-theme-hint-color);
@@ -36,9 +38,9 @@
 
     .grid {
         display: grid;
-        gap: 20px;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        margin-bottom: 20px;
+        gap: 30px;
+        margin-bottom: 40px;
     }
 }
 

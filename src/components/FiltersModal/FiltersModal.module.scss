@@ -53,57 +53,75 @@
             font-size: 16px;
         }
 
-        .genderButtons {
+        .priceInputs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin: 15px 0;
 
-            button {
+            .inputGroup {
                 flex: 1;
-                padding: 12px;
-                border: 1px solid var(--tg-theme-hint-color);
-                border-radius: 8px;
-                background: var(--tg-theme-secondary-bg-color);
-                color: var(--tg-theme-text-color);
-                cursor: pointer;
+                
+                label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-size: 14px;
+                    color: var(--tg-theme-hint-color);
+                }
 
-                &.active {
-                    background: var(--primary-color);
-                    color: white;
-                    border-color: var(--primary-color);
+                input {
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid var(--tg-theme-hint-color);
+                    border-radius: 8px;
+                    background: var(--tg-theme-secondary-bg-color);
+                    color: var(--tg-theme-text-color);
                 }
             }
         }
 
         .colorGrid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 10px;
-            margin-bottom: 20px;
+            margin: 15px 0;
+
+            @media (min-width: 768px) {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
 
             .colorOption {
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                padding: 8px;
+                padding: 10px;
                 border-radius: 8px;
                 cursor: pointer;
                 border: 1px solid var(--tg-theme-hint-color);
+                background: var(--tg-theme-secondary-bg-color);
 
                 &.active {
-                    background: var(--tg-theme-secondary-bg-color);
                     border-color: var(--primary-color);
+                    background: var(--tg-theme-bg-color);
                 }
 
                 .colorSwatch {
-                    width: 20px;
-                    height: 20px;
+                    width: 24px;
+                    height: 24px;
                     border-radius: 4px;
                     border: 1px solid var(--tg-theme-hint-color);
+                    flex-shrink: 0;
                 }
 
                 .colorName {
                     font-size: 14px;
+                    flex-grow: 1;
+                }
+
+                input[type="checkbox"] {
+                    margin: 0;
+                    width: 18px;
+                    height: 18px;
+                    flex-shrink: 0;
                 }
             }
         }
