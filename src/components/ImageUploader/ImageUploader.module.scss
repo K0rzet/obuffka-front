@@ -1,0 +1,124 @@
+.container {
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &.light {
+    background: #fff;
+  }
+
+  &.dark {
+    background: #1a1a1a;
+  }
+}
+
+.uploadArea {
+  width: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.isEmpty {
+    min-height: 200px;
+  }
+
+  &:not(.isEmpty) {
+    min-height: 80px;
+  }
+
+  &.light {
+    border: 2px dashed #ccc;
+    background: #f8f8f8;
+
+    &:hover {
+      border-color: #007bff;
+      background: #f0f0f0;
+    }
+  }
+
+  &.dark {
+    border: 2px dashed #444;
+    background: #2a2a2a;
+
+    &:hover {
+      border-color: #007bff;
+      background: #333;
+    }
+  }
+}
+
+.uploadContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+
+  svg {
+    color: #007bff;
+  }
+
+  span {
+    font-size: 16px;
+  }
+
+  small {
+    font-size: 14px;
+  }
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.previewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.previewContainer {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+} 
