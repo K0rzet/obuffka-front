@@ -12,12 +12,6 @@ const AdminPage: React.FC = observer(() => {
 
     useEffect(() => {
         shoesStore.fetchShoes();
-        if (!authStore.user) {
-            console.log('Пользователь не авторизован, запускаем initAuth');
-            authStore.initAuth();
-        } else {
-            console.log('Текущий пользователь:', authStore.user);
-        }
     }, []);
 
     if (authStore.isLoading) {
