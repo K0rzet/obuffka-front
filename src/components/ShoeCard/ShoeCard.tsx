@@ -12,11 +12,13 @@ const ShoeCard: React.FC<ShoeCardProps> = ({ shoe }) => {
             <h3 className={styles.title}>{shoe.name}</h3>
             <p className={styles.description}>{shoe.description}</p>
             <div className={styles.info}>
-                <span className={styles.price}>{shoe.price} ₽</span>
-                <span className={styles.color}>Цвет: {shoe.color}</span>
+                <span className={styles.price}>{shoe.price.toLocaleString('ru-RU')} ₽</span>
+                <span className={styles.color}>{shoe.color}</span>
             </div>
             <div className={styles.sizes}>
-                Размеры: {shoe.sizes.join(', ')}
+                {shoe.sizes.map((size) => (
+                    <span key={size}>{size}</span>
+                ))}
             </div>
         </div>
     );

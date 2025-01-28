@@ -3,6 +3,11 @@
   line-height: 1.5;
   font-weight: 400;
   
+  --primary-color: #B108FE;
+  --primary-hover: #9906d8;
+  --primary-light: rgba(177, 8, 254, 0.1);
+  --danger-color: #ff4d4d;
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,4 +24,13 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+button {
+  background: var(--primary-color);
+  color: white;
+  
+  &:hover {
+    background: var(--primary-hover);
+  }
 } 

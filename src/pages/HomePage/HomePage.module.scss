@@ -9,20 +9,21 @@
     bottom: 30px;
     right: 30px;
     padding: 16px 32px;
-    background: #FD9BBD;
+    background: var(--primary-color);
     color: white;
     border: none;
     border-radius: 30px;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(253, 155, 189, 0.3);
+    box-shadow: 0 4px 15px rgba(177, 8, 254, 0.3);
     transition: all 0.3s ease;
     z-index: 100;
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(253, 155, 189, 0.4);
+        background: var(--primary-hover);
+        box-shadow: 0 6px 20px rgba(177, 8, 254, 0.4);
     }
 
     &:active {

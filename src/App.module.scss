@@ -32,12 +32,12 @@
       transition: all 0.2s ease;
 
       &:hover {
-        background: #FD9BBD;
+        background: var(--primary-color);
         color: white;
       }
 
       &.active {
-        background: #FD9BBD;
+        background: var(--primary-color);
         color: white;
       }
     }
