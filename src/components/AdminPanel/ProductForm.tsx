@@ -68,15 +68,15 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
             // Существующие изображения (которые остаются)
             const remainingImages = existingImages.filter(img => !imagesToDelete.includes(img));
             
-            // Отправляем как JSON строку, так как backend парсит их
-            if (remainingImages.length > 0) {
-                form.append('existingImages', JSON.stringify(remainingImages));
-            }
+            // Отправляем каждое изображение отдельно как элемент массива
+            remainingImages.forEach(imageUrl => {
+                form.append('existingImages', imageUrl);
+            });
             
             // Изображения для удаления
-            if (imagesToDelete.length > 0) {
-                form.append('imagesToDelete', JSON.stringify(imagesToDelete));
-            }
+            imagesToDelete.forEach(imageUrl => {
+                form.append('imagesToDelete', imageUrl);
+            });
         }
 
         // Новые изображения

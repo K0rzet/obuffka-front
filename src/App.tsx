@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { RiHome2Line, RiSettings4Line, RiBugLine } from 'react-icons/ri';
+import { RiHome2Line, RiSettings4Line, RiBugLine, RiMessage3Line } from 'react-icons/ri';
 import HomePage from './pages/HomePage/HomePage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import { authStore } from './store/AuthStore';
@@ -77,9 +77,14 @@ const App: React.FC = observer(() => {
                         <RiHome2Line size={24} />
                     </Link>
                     {(authStore.isAdmin || import.meta.env.DEV) && (
-                        <Link to="/admin" title="Админ панель">
-                            <RiSettings4Line size={24} />
-                        </Link>
+                        <>
+                            <Link to="/admin" title="Админ панель">
+                                <RiSettings4Line size={24} />
+                            </Link>
+                            <Link to="/admin/chats" title="Чаты">
+                                <RiMessage3Line size={24} />
+                            </Link>
+                        </>
                     )}
                     {import.meta.env.DEV && (
                         <button 
@@ -96,6 +101,7 @@ const App: React.FC = observer(() => {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/admin" element={<AdminPage />} />
+                        <Route path="/admin/chats" element={<AdminPage />} />
                     </Routes>
                 </main>
 
