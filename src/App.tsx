@@ -22,12 +22,6 @@ const ErrorScreen: React.FC<{ error: string; onRetry: () => void }> = ({ error, 
             <button onClick={onRetry} className={styles.retryButton}>
                 Попробовать снова
             </button>
-            <button 
-                onClick={() => authStore.forceTestMode()} 
-                className={styles.testModeButton}
-            >
-                Тестовый режим
-            </button>
         </div>
     </div>
 );

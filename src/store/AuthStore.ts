@@ -40,26 +40,11 @@ class AuthStore {
             const initData = this.getTelegramInitData();
             
             if (!initData) {
-                await this.createTestUser();
-                return;
+                throw new Error('Не удалось получить данные авторизации Telegram');
             }
 
             // Пытаемся авторизоваться через Telegram
-            try {
-                await this.loginWithTelegram(initData);
-            } catch (telegramError: any) {
-                // Если backend недоступен, переходим на тестовый режим
-                if (
-                    telegramError.message.includes('Backend недоступен') ||
-                    telegramError.message.includes('Ошибка валидации') ||
-                    telegramError.message.includes('Нет соединения') ||
-                    !telegramError.response
-                ) {
-                    await this.createTestUser();
-                } else {
-                    throw telegramError;
-                }
-            }
+            await this.loginWithTelegram(initData);
             
         } catch (error) {
             console.error('Критическая ошибка инициализации авторизации:', error);
@@ -67,13 +52,6 @@ class AuthStore {
             runInAction(() => {
                 this.error = error instanceof Error ? error.message : 'Ошибка авторизации';
             });
-            
-            // В любом случае создаем тестового пользователя
-            try {
-                await this.createTestUser();
-            } catch (testError) {
-                console.error('Не удалось создать тестового пользователя:', testError);
-            }
         } finally {
             runInAction(() => {
                 this.isLoading = false;
@@ -164,20 +142,6 @@ class AuthStore {
         }
     }
 
-    private async createTestUser() {
-        runInAction(() => {
-            this.user = {
-                id: 999999999,
-                firstName: 'Тестовый',
-                lastName: 'Пользователь',
-                username: 'test_user',
-                isAdmin: false
-            };
-            this.error = null;
-            this.isTestMode = true;
-        });
-    }
-
     async fetchCurrentUser() {
         try {
             const response = await axiosInstance.get<User>('/auth/me');
@@ -200,7 +164,6 @@ class AuthStore {
         runInAction(() => {
             this.user = null;
             this.error = null;
-            this.isTestMode = false;
         });
         localStorage.removeItem('token');
     }
@@ -211,23 +174,13 @@ class AuthStore {
         });
     }
 
-    async forceTestMode() {
-        await this.createTestUser();
-    }
-
     get isAuthenticated(): boolean {
         return !!this.user;
     }
 
     get isAdmin(): boolean {
-        return this.user?.isAdmin || this.isTestMode;
+        return this.user?.isAdmin || false;
     }
-
-    get isTestMode(): boolean {
-        return this.user?.id === 999999999;
-    }
-
-    private isTestMode: boolean = false;
 }
 
 export const authStore = new AuthStore(); 

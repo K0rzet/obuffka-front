@@ -6,6 +6,7 @@ import ProductForm from './ProductForm';
 import { Shoe } from '../../types/shoe';
 import styles from './ProductManagement.module.scss';
 import Pagination from '../Pagination/Pagination';
+import { getImageUrl } from '../../utils/imageUtils';
 
 const ProductManagement: React.FC = observer(() => {
     const [editingShoe, setEditingShoe] = useState<Shoe | null>(null);
@@ -65,19 +66,39 @@ const ProductManagement: React.FC = observer(() => {
                 {shoesStore.shoes.map(shoe => (
                     <div key={shoe.id} className={styles.productItem}>
                         <div className={styles.productImages}>
-                            {shoe.images && shoe.images.length > 0 && (
-                                <img src={shoe.images[0]} alt={shoe.name} />
+                            {shoe.images && shoe.images.length > 0 ? (
+                                <img 
+                                    src={getImageUrl(shoe.images[0])} 
+                                    alt={shoe.name}
+                                    className={styles.productImage}
+                                />
+                            ) : (
+                                <div className={styles.noImage}>
+                                    <span>Нет фото</span>
+                                </div>
+                            )}
+                            {shoe.images && shoe.images.length > 1 && (
+                                <div className={styles.imageCount}>
+                                    +{shoe.images.length - 1}
+                                </div>
                             )}
                         </div>
                         <div className={styles.productInfo}>
                             <h3>{shoe.name}</h3>
-                            <p>{shoe.description}</p>
-                            <p className={styles.price}>{shoe.price} ₽</p>
-                            <p>Цвет: {shoe.color}</p>
-                            <p>Размеры: {shoe.sizes.join(', ')}</p>
+                            <p className={styles.description}>{shoe.description}</p>
+                            <div className={styles.details}>
+                                <p className={styles.price}>{shoe.price.toLocaleString('ru-RU')} ₽</p>
+                                <p>Цвет: {shoe.color}</p>
+                                <p>Размеры: {shoe.sizes.join(', ')}</p>
+                            </div>
                         </div>
                         <div className={styles.actions}>
-                            <button onClick={() => setEditingShoe(shoe)}>Редактировать</button>
+                            <button 
+                                onClick={() => setEditingShoe(shoe)}
+                                className={styles.editButton}
+                            >
+                                Редактировать
+                            </button>
                             <button 
                                 onClick={() => shoesStore.deleteShoe(shoe.id)}
                                 className={styles.deleteButton}
