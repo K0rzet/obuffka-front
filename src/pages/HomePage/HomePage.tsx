@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { shoesStore } from '../../store/ShoesStore';
+import { authStore } from '../../store/AuthStore';
 
 import ShoeCard from '../../components/ShoeCard/ShoeCard';
 import Pagination from '../../components/Pagination/Pagination';
@@ -12,11 +13,39 @@ const HomePage: React.FC = observer(() => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
     useEffect(() => {
-        shoesStore.fetchShoes();
-    }, []);
+        // Загружаем товары только если пользователь авторизован
+        if (authStore.isAuthenticated) {
+            shoesStore.fetchShoes();
+        }
+    }, [authStore.isAuthenticated]);
 
-    if (shoesStore.isLoading) {
-        return <div>Загрузка...</div>;
+    // Показываем загрузку авторизации
+    if (!authStore.isInitialized) {
+        return (
+            <div className={styles.loadingContainer}>
+                <div className={styles.spinner}></div>
+                <p>Инициализация...</p>
+            </div>
+        );
+    }
+
+    // Показываем ошибку авторизации
+    if (authStore.error && !authStore.user) {
+        return (
+            <div className={styles.errorContainer}>
+                <h2>Ошибка авторизации</h2>
+                <p>{authStore.error}</p>
+                <button 
+                    onClick={() => {
+                        authStore.clearError();
+                        authStore.initAuth();
+                    }}
+                    className={styles.retryButton}
+                >
+                    Попробовать снова
+                </button>
+            </div>
+        );
     }
 
     return (
@@ -42,17 +71,52 @@ const HomePage: React.FC = observer(() => {
                 <FiltersModal onClose={() => setIsFiltersOpen(false)} />
             )}
 
-            <div className={styles.grid}>
-                {shoesStore.shoes.map(shoe => (
-                    <ShoeCard key={shoe.id} shoe={shoe} />
-                ))}
-            </div>
-            
-            <Pagination 
-                currentPage={shoesStore.page}
-                totalPages={shoesStore.totalPages}
-                onPageChange={(page) => shoesStore.setPage(page)}
-            />
+            {/* Показываем ошибку загрузки товаров */}
+            {shoesStore.error && (
+                <div className={styles.errorMessage}>
+                    <p>{shoesStore.error}</p>
+                    <button 
+                        onClick={() => shoesStore.fetchShoes()}
+                        className={styles.retryButton}
+                    >
+                        Повторить
+                    </button>
+                </div>
+            )}
+
+            {/* Показываем загрузку товаров */}
+            {shoesStore.isLoading && (
+                <div className={styles.loadingContainer}>
+                    <div className={styles.spinner}></div>
+                    <p>Загрузка товаров...</p>
+                </div>
+            )}
+
+            {/* Показываем товары */}
+            {!shoesStore.isLoading && !shoesStore.error && (
+                <>
+                    {shoesStore.shoes.length > 0 ? (
+                        <div className={styles.grid}>
+                            {shoesStore.shoes.map(shoe => (
+                                <ShoeCard key={shoe.id} shoe={shoe} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={styles.emptyState}>
+                            <h3>Товары не найдены</h3>
+                            <p>Попробуйте изменить фильтры или обратитесь к администратору</p>
+                        </div>
+                    )}
+                    
+                    {shoesStore.shoes.length > 0 && (
+                        <Pagination 
+                            currentPage={shoesStore.page}
+                            totalPages={shoesStore.totalPages}
+                            onPageChange={(page) => shoesStore.setPage(page)}
+                        />
+                    )}
+                </>
+            )}
         </div>
     );
 });

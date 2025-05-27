@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка Backend API</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .loading { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover { background: #0056b3; }
+        .endpoint { margin: 20px 0; }
+        .endpoint h3 { margin: 10px 0 5px 0; }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Проверка Backend API</h1>
+        <p>Эта страница поможет проверить доступность и работоспособность backend API.</p>
+        
+        <button onclick="checkAllEndpoints()">Проверить все endpoints</button>
+        <button onclick="clearResults()">Очистить результаты</button>
+        
+        <div id="results"></div>
+        
+        <div class="endpoint">
+            <h3>Проверяемые endpoints:</h3>
+            <ul>
+                <li><code>GET /shoes</code> - Список товаров</li>
+                <li><code>POST /auth/login</code> - Авторизация</li>
+                <li><code>GET /auth/me</code> - Текущий пользователь</li>
+                <li><code>GET /chat</code> - Список чатов</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://api.obuffka.ilyacode.ru';
+        
+        function addResult(endpoint, status, message, details = null) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${status}`;
+            div.innerHTML = `
+                <strong>${endpoint}</strong>: ${message}
+                ${details ? `<pre>${details}</pre>` : ''}
+            `;
+            results.appendChild(div);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function checkEndpoint(method, endpoint, body = null, requiresAuth = false) {
+            try {
+                addResult(endpoint, 'loading', 'Проверяем...');
+                
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                
+                if (requiresAuth) {
+                    const token = localStorage.getItem('token');
+                    if (token) {
+                        options.headers.Authorization = `Bearer ${token}`;
+                    }
+                }
+                
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+                
+                const response = await fetch(`${API_URL}${endpoint}`, options);
+                const text = await response.text();
+                
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    data = text;
+                }
+                
+                if (response.ok) {
+                    addResult(endpoint, 'success', `✅ Успешно (${response.status})`, 
+                        JSON.stringify(data, null, 2).substring(0, 500) + '...');
+                } else {
+                    addResult(endpoint, 'error', `❌ Ошибка (${response.status})`, 
+                        JSON.stringify(data, null, 2));
+                }
+            } catch (error) {
+                addResult(endpoint, 'error', `❌ Сетевая ошибка: ${error.message}`);
+            }
+        }
+        
+        async function checkAllEndpoints() {
+            clearResults();
+            
+            // Проверяем основные endpoints
+            await checkEndpoint('GET', '/shoes');
+            await checkEndpoint('POST', '/auth/login', { initData: 'test-data' });
+            await checkEndpoint('GET', '/auth/me', null, true);
+            await checkEndpoint('GET', '/chat', null, true);
+            
+            addResult('Проверка завершена', 'warning', 
+                'Если видите ошибки 401/404, это нормально - backend может быть не запущен или требует настройки.');
+        }
+        
+        // Автоматическая проверка при загрузке
+        window.onload = () => {
+            setTimeout(checkAllEndpoints, 1000);
+        };
+    </script>
+</body>
+</html> 

@@ -57,10 +57,23 @@ class ShoesStore {
                 this.shoes = response.data.data;
                 this.totalPages = response.data.meta.lastPage;
             });
-        } catch (error) {
+        } catch (error: any) {
+            console.error('Ошибка при загрузке товаров:', error);
+            
             runInAction(() => {
-                this.error = 'Ошибка при загрузке товаров';
-                console.error(error);
+                if (error.response?.status === 404) {
+                    this.error = 'API endpoint не найден. Проверьте настройки backend.';
+                } else if (error.response?.status === 401) {
+                    this.error = 'Ошибка авторизации. Попробуйте перезагрузить страницу.';
+                } else if (!error.response) {
+                    this.error = 'Нет соединения с сервером. Проверьте подключение к интернету.';
+                } else {
+                    this.error = 'Ошибка при загрузке товаров';
+                }
+                
+                // В случае ошибки показываем пустой список
+                this.shoes = [];
+                this.totalPages = 1;
             });
         } finally {
             runInAction(() => {
