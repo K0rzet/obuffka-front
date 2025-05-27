@@ -15,12 +15,14 @@ const ChatWindow: React.FC<ChatWindowProps> = observer(({ chat, onClose }) => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        chatStore.joinChat(chat.id);
         loadChatMessages();
 
-        return () => {
-            chatStore.leaveChat(chat.id);
-        };
+        // Автообновление сообщений каждые 3 секунды
+        const interval = setInterval(() => {
+            loadChatMessages();
+        }, 3000);
+
+        return () => clearInterval(interval);
     }, [chat.id]);
 
     useEffect(() => {
@@ -39,10 +41,14 @@ const ChatWindow: React.FC<ChatWindowProps> = observer(({ chat, onClose }) => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (messageText.trim()) {
-            chatStore.sendMessage(chat.id, messageText.trim());
-            setMessageText('');
+            try {
+                await chatStore.sendMessage(chat.id, messageText.trim(), chat.user.id);
+                setMessageText('');
+            } catch (error) {
+                console.error('Ошибка отправки сообщения:', error);
+            }
         }
     };
 

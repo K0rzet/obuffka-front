@@ -9,13 +9,16 @@ const ChatManagement: React.FC = observer(() => {
     const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
 
     useEffect(() => {
-        chatStore.connect();
         chatStore.fetchChats();
         chatStore.fetchStats();
 
-        return () => {
-            chatStore.disconnect();
-        };
+        // Автообновление каждые 5 секунд
+        const interval = setInterval(() => {
+            chatStore.fetchChats();
+            chatStore.fetchStats();
+        }, 5000);
+
+        return () => clearInterval(interval);
     }, []);
 
     const selectedChat = selectedChatId 
