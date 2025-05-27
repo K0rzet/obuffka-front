@@ -76,7 +76,7 @@ const App: React.FC = observer(() => {
                     <Link to="/" title="Главная">
                         <RiHome2Line size={24} />
                     </Link>
-                    {authStore.isAdmin && (
+                    {(authStore.isAdmin || import.meta.env.DEV) && (
                         <Link to="/admin" title="Админ панель">
                             <RiSettings4Line size={24} />
                         </Link>
@@ -100,12 +100,20 @@ const App: React.FC = observer(() => {
                 </main>
 
                 {/* Показываем информацию о пользователе в режиме разработки */}
-                {import.meta.env.DEV && authStore.user && (
+                {import.meta.env.DEV && (
                     <div className={styles.devInfo}>
                         <small>
-                            Пользователь: {authStore.user.firstName} {authStore.user.lastName} 
-                            {authStore.isAdmin && ' (Админ)'}
-                            {authStore.isTestMode && ' [Тестовый режим]'}
+                            {authStore.user ? (
+                                <>
+                                    Пользователь: {authStore.user.firstName} {authStore.user.lastName} 
+                                    {authStore.isAdmin && ' (Админ)'}
+                                    {authStore.isTestMode && ' [Тестовый режим]'}
+                                    <br />
+                                    ID: {authStore.user.id}, isAdmin: {authStore.user.isAdmin ? 'true' : 'false'}
+                                </>
+                            ) : (
+                                'Пользователь не авторизован'
+                            )}
                         </small>
                         
                         {/* Кнопка для просмотра отладочной информации */}
