@@ -69,7 +69,7 @@ const App: React.FC = observer(() => {
                 </main>
 
                 {/* Показываем информацию о пользователе в режиме разработки */}
-                {process.env.NODE_ENV === 'development' && authStore.user && (
+                {import.meta.env.DEV && authStore.user && (
                     <div className={styles.devInfo}>
                         <small>
                             Пользователь: {authStore.user.firstName} {authStore.user.lastName} 

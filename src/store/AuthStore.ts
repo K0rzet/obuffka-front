@@ -2,28 +2,6 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import axiosInstance from '../api/axiosInstance';
 import { User, LoginResponse } from '../types/user';
 
-// Объявляем глобальные типы для Telegram WebApp
-declare global {
-    interface Window {
-        Telegram?: {
-            WebApp?: {
-                initData: string;
-                initDataUnsafe: any;
-                ready: () => void;
-                expand: () => void;
-                close: () => void;
-                MainButton: any;
-                BackButton: any;
-                colorScheme: 'light' | 'dark';
-                themeParams: any;
-                isExpanded: boolean;
-                viewportHeight: number;
-                viewportStableHeight: number;
-            };
-        };
-    }
-}
-
 class AuthStore {
     user: User | null = null;
     isLoading: boolean = false;
@@ -59,7 +37,7 @@ class AuthStore {
             
             if (!initData) {
                 // Если мы не в Telegram WebApp, создаем тестового пользователя для разработки
-                if (process.env.NODE_ENV === 'development') {
+                if (import.meta.env.DEV) {
                     await this.createTestUser();
                     return;
                 }
