@@ -39,9 +39,31 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
 
+    @media (max-width: 768px) {
+      bottom: 15px;
+      padding: 12px 20px;
+      gap: 25px;
+      border-radius: 20px;
+    }
+
+    @media (max-width: 480px) {
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      transform: none;
+      width: calc(100% - 20px);
+      padding: 10px 15px;
+      gap: 20px;
+      border-radius: 16px;
+    }
+
     &:hover {
       transform: translateX(-50%) translateY(-2px);
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+
+      @media (max-width: 480px) {
+        transform: translateY(-2px);
+      }
     }
 
     a, button {
@@ -55,6 +77,15 @@
       border-radius: 15px;
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (max-width: 480px) {
+        padding: 10px;
+        border-radius: 12px;
+        flex: 1;
+      }
 
       &::before {
         content: '';
@@ -68,6 +99,10 @@
         transition: opacity 0.3s ease;
         border-radius: 15px;
         z-index: -1;
+
+        @media (max-width: 480px) {
+          border-radius: 12px;
+        }
       }
 
       &:hover {
@@ -77,10 +112,21 @@
         &::before {
           opacity: 1;
         }
+
+        @media (max-width: 480px) {
+          transform: translateY(-1px);
+        }
       }
 
       &:active {
         transform: translateY(0);
+      }
+
+      svg {
+        @media (max-width: 480px) {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
   }
@@ -91,6 +137,14 @@
   padding: 30px 20px 120px 20px;
   position: relative;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px 100px 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 12px 80px 12px;
+  }
 }
 
 .loadingScreen {

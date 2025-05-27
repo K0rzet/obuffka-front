@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { RiHome2Line, RiSettings4Line, RiBugLine, RiMessage3Line } from 'react-icons/ri';
+import { RiHome2Line, RiSettings4Line, RiMessage3Line } from 'react-icons/ri';
 import HomePage from './pages/HomePage/HomePage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import { authStore } from './store/AuthStore';
@@ -29,20 +29,6 @@ const ErrorScreen: React.FC<{ error: string; onRetry: () => void }> = ({ error, 
                 Тестовый режим
             </button>
         </div>
-        
-        {/* Отладочная информация */}
-        {import.meta.env.DEV && authStore.debugInfo.length > 0 && (
-            <details className={styles.debugInfo}>
-                <summary>Отладочная информация</summary>
-                <div className={styles.debugLog}>
-                    {authStore.debugInfo.map((info, index) => (
-                        <div key={index} className={styles.debugLine}>
-                            {info}
-                        </div>
-                    ))}
-                </div>
-            </details>
-        )}
     </div>
 );
 
@@ -76,8 +62,8 @@ const App: React.FC = observer(() => {
                     <Link to="/" title="Главная">
                         <RiHome2Line size={24} />
                     </Link>
-                    {/* Показываем админ навигацию если пользователь админ или в режиме разработки */}
-                    {(authStore.user?.isAdmin || authStore.isAdmin || import.meta.env.DEV) && (
+                    {/* Показываем админ навигацию только для админов */}
+                    {authStore.isAdmin && (
                         <>
                             <Link to="/admin" title="Админ панель">
                                 <RiSettings4Line size={24} />
@@ -86,15 +72,6 @@ const App: React.FC = observer(() => {
                                 <RiMessage3Line size={24} />
                             </Link>
                         </>
-                    )}
-                    {import.meta.env.DEV && (
-                        <button 
-                            onClick={() => authStore.forceTestMode()} 
-                            title="Тестовый режим"
-                            className={styles.debugButton}
-                        >
-                            <RiBugLine size={24} />
-                        </button>
                     )}
                 </nav>
                 
@@ -105,43 +82,6 @@ const App: React.FC = observer(() => {
                         <Route path="/admin/chats" element={<AdminPage />} />
                     </Routes>
                 </main>
-
-                {/* Показываем информацию о пользователе в режиме разработки */}
-                {import.meta.env.DEV && (
-                    <div className={styles.devInfo}>
-                        <small>
-                            {authStore.user ? (
-                                <>
-                                    Пользователь: {authStore.user.firstName} {authStore.user.lastName} 
-                                    {authStore.isAdmin && ' (Админ)'}
-                                    {authStore.isTestMode && ' [Тестовый режим]'}
-                                    <br />
-                                    ID: {authStore.user.id}, isAdmin: {authStore.user.isAdmin ? 'true' : 'false'}
-                                    <br />
-                                    authStore.isAdmin: {authStore.isAdmin ? 'true' : 'false'}
-                                    <br />
-                                    Навигация админа: {(authStore.user?.isAdmin || authStore.isAdmin || import.meta.env.DEV) ? 'показана' : 'скрыта'}
-                                </>
-                            ) : (
-                                'Пользователь не авторизован'
-                            )}
-                        </small>
-                        
-                        {/* Кнопка для просмотра отладочной информации */}
-                        {authStore.debugInfo.length > 0 && (
-                            <details className={styles.devDebug}>
-                                <summary>Debug Log ({authStore.debugInfo.length})</summary>
-                                <div className={styles.debugLog}>
-                                    {authStore.debugInfo.slice(-10).map((info, index) => (
-                                        <div key={index} className={styles.debugLine}>
-                                            {info}
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        )}
-                    </div>
-                )}
             </div>
         </BrowserRouter>
     );
