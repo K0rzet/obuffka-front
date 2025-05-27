@@ -1,0 +1,257 @@
+.chatWindow {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--tg-theme-bg-color);
+}
+
+.header {
+  padding: 20px;
+  border-bottom: 1px solid var(--tg-theme-hint-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--tg-theme-secondary-bg-color);
+}
+
+.userInfo {
+  h3 {
+    margin: 0 0 5px 0;
+    color: var(--tg-theme-text-color);
+    font-size: 18px;
+  }
+}
+
+.chatMeta {
+  display: flex;
+  gap: 15px;
+  
+  .status,
+  .type {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  
+  button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    
+    &.closeButton {
+      background: #ff4757;
+      color: white;
+    }
+    
+    &.backButton {
+      background: var(--tg-theme-hint-color);
+      color: var(--tg-theme-text-color);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.messagesContainer {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  
+  &.admin {
+    align-self: flex-end;
+    
+    .messageContent {
+      background: var(--tg-theme-button-color);
+      color: var(--tg-theme-button-text-color);
+    }
+    
+    .messageTime {
+      text-align: right;
+    }
+  }
+  
+  &.user {
+    align-self: flex-start;
+    
+    .messageContent {
+      background: var(--tg-theme-secondary-bg-color);
+      color: var(--tg-theme-text-color);
+    }
+  }
+}
+
+.messageContent {
+  padding: 12px 16px;
+  border-radius: 18px;
+  word-wrap: break-word;
+}
+
+.messageText {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.messageTime {
+  font-size: 11px;
+  color: var(--tg-theme-hint-color);
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.mediaMessage {
+  .messageText {
+    margin-top: 8px;
+  }
+}
+
+.messageImage {
+  max-width: 100%;
+  border-radius: 12px;
+  display: block;
+}
+
+.documentMessage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.documentIcon {
+  font-size: 24px;
+}
+
+.documentInfo {
+  flex: 1;
+  
+  .fileName {
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  
+  .fileSize {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+}
+
+.downloadButton {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.audioMessage,
+.videoMessage {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.inputContainer {
+  padding: 20px;
+  border-top: 1px solid var(--tg-theme-hint-color);
+  display: flex;
+  gap: 10px;
+  background: var(--tg-theme-secondary-bg-color);
+}
+
+.messageInput {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--tg-theme-hint-color);
+  border-radius: 12px;
+  background: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color);
+  }
+  
+  &::placeholder {
+    color: var(--tg-theme-hint-color);
+  }
+}
+
+.sendButton {
+  padding: 12px 20px;
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  &:not(:disabled):hover {
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px;
+  }
+  
+  .messages {
+    padding: 15px;
+  }
+  
+  .message {
+    max-width: 85%;
+  }
+  
+  .inputContainer {
+    padding: 15px;
+  }
+} 

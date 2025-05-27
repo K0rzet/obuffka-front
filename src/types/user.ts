@@ -1,7 +1,9 @@
 export interface User {
     id: number;
-    telegramId: number;
-    username: string;
+    telegramId: string;
+    username?: string;
+    firstName?: string;
+    lastName?: string;
     isAdmin: boolean;
 }
 

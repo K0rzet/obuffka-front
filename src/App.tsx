@@ -7,10 +7,45 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import { authStore } from './store/AuthStore';
 import styles from './App.module.scss';
 
+const LoadingScreen: React.FC = () => (
+    <div className={styles.loadingScreen}>
+        <div className={styles.spinner}></div>
+        <p>Инициализация приложения...</p>
+    </div>
+);
+
+const ErrorScreen: React.FC<{ error: string; onRetry: () => void }> = ({ error, onRetry }) => (
+    <div className={styles.errorScreen}>
+        <h2>Ошибка авторизации</h2>
+        <p>{error}</p>
+        <button onClick={onRetry} className={styles.retryButton}>
+            Попробовать снова
+        </button>
+    </div>
+);
+
 const App: React.FC = observer(() => {
     useEffect(() => {
         authStore.initAuth();
     }, []);
+
+    // Показываем экран загрузки во время инициализации
+    if (authStore.isLoading && !authStore.isInitialized) {
+        return <LoadingScreen />;
+    }
+
+    // Показываем экран ошибки, если авторизация не удалась
+    if (authStore.error && !authStore.user) {
+        return (
+            <ErrorScreen 
+                error={authStore.error} 
+                onRetry={() => {
+                    authStore.clearError();
+                    authStore.initAuth();
+                }} 
+            />
+        );
+    }
 
     return (
         <BrowserRouter>
@@ -19,17 +54,29 @@ const App: React.FC = observer(() => {
                     <Link to="/" title="Главная">
                         <RiHome2Line size={24} />
                     </Link>
-                    {authStore.user?.isAdmin && (
+                    {authStore.isAdmin && (
                         <Link to="/admin" title="Админ панель">
                             <RiSettings4Line size={24} />
                         </Link>
                     )}
                 </nav>
                 
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/admin" element={<AdminPage />} />
-                </Routes>
+                <main className={styles.main}>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/admin" element={<AdminPage />} />
+                    </Routes>
+                </main>
+
+                {/* Показываем информацию о пользователе в режиме разработки */}
+                {process.env.NODE_ENV === 'development' && authStore.user && (
+                    <div className={styles.devInfo}>
+                        <small>
+                            Пользователь: {authStore.user.firstName} {authStore.user.lastName} 
+                            {authStore.isAdmin && ' (Админ)'}
+                        </small>
+                    </div>
+                )}
             </div>
         </BrowserRouter>
     );

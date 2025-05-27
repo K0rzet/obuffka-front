@@ -9,115 +9,233 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    overflow-y: auto;
     padding: 20px;
 }
 
 .modalContent {
-    background: var(--tg-theme-bg-color, white);
+    background: var(--tg-theme-bg-color);
     border-radius: 12px;
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
+}
+
+.form {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h2 {
+        margin: 0 0 10px 0;
+        color: var(--tg-theme-text-color);
+        font-size: 24px;
+        text-align: center;
+    }
+
+    input, textarea, select {
+        padding: 12px 16px;
+        border: 1px solid var(--tg-theme-hint-color);
+        border-radius: 8px;
+        background: var(--tg-theme-secondary-bg-color);
+        color: var(--tg-theme-text-color);
+        font-size: 16px;
+        font-family: inherit;
+
+        &:focus {
+            outline: none;
+            border-color: var(--tg-theme-button-color);
+        }
+
+        &::placeholder {
+            color: var(--tg-theme-hint-color);
+        }
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+}
+
+.colorSection {
+    label {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--tg-theme-text-color);
+        font-weight: 500;
+    }
+}
+
+.colorGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+}
+
+.colorOption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--tg-theme-hint-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--tg-theme-secondary-bg-color);
+
+    &:hover {
+        border-color: var(--tg-theme-button-color);
+    }
+
+    &.active {
+        border-color: var(--tg-theme-button-color);
+        background: var(--tg-theme-button-color);
+        
+        .colorName {
+            color: var(--tg-theme-button-text-color);
+        }
+    }
+}
+
+.colorSwatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+.colorName {
+    font-size: 14px;
+    color: var(--tg-theme-text-color);
+}
+
+.existingImages {
+    label {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--tg-theme-text-color);
+        font-weight: 500;
+    }
+}
+
+.imageGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.imageItem {
     position: relative;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    
-    .form {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        padding: 20px;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--tg-theme-hint-color);
 
-        input, textarea, select {
-            padding: 12px;
-            border: 1px solid var(--tg-theme-hint-color, #ddd);
-            border-radius: 8px;
-            font-size: 14px;
-            background: var(--tg-theme-secondary-bg-color, white);
-            color: var(--tg-theme-text-color, #333);
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
 
-            &::placeholder {
-                color: var(--tg-theme-hint-color, #999);
+.deleteImageButton {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+
+    &:hover {
+        background: rgba(255, 0, 0, 1);
+    }
+}
+
+.newImages {
+    label {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--tg-theme-text-color);
+        font-weight: 500;
+    }
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+
+    button {
+        flex: 1;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.2s;
+
+        &[type="submit"] {
+            background: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+
+            &:hover {
+                opacity: 0.8;
             }
         }
 
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
+        &[type="button"] {
+            background: var(--tg-theme-secondary-bg-color);
+            color: var(--tg-theme-text-color);
+            border: 1px solid var(--tg-theme-hint-color);
 
-        .buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
-
-            button {
-                padding: 12px 24px;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                font-weight: 500;
-                transition: all 0.2s ease;
-
-                &:first-child {
-                    background: var(--primary-color);
-                    color: white;
-
-                    &:hover {
-                        background: var(--primary-hover);
-                    }
-                }
-
-                &:last-child {
-                    background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-                    color: var(--tg-theme-hint-color, #666);
-
-                    &:hover {
-                        background: var(--tg-theme-hint-color, #eee);
-                    }
-                }
+            &:hover {
+                background: var(--tg-theme-hint-color);
             }
         }
     }
 }
 
-.colorSection {
-    margin: 20px 0;
-
-    .colorGrid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 10px;
-        margin-top: 10px;
+@media (max-width: 768px) {
+    .modalOverlay {
+        padding: 10px;
     }
 
-    .colorOption {
-        display: flex;
-        align-items: center;
+    .form {
+        padding: 20px;
+        gap: 16px;
+
+        h2 {
+            font-size: 20px;
+        }
+    }
+
+    .colorGrid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+
+    .imageGrid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
         gap: 8px;
-        padding: 8px;
-        border-radius: 6px;
-        cursor: pointer;
-        border: 1px solid var(--tg-theme-hint-color, #ddd);
-        transition: all 0.2s ease;
+    }
 
-        &.active {
-            background: var(--tg-theme-secondary-bg-color);
-            border-color: var(--primary-color);
-        }
-
-        .colorSwatch {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 1px solid var(--tg-theme-hint-color, #ddd);
-        }
-
-        .colorName {
-            font-size: 14px;
-            color: var(--tg-theme-text-color);
+    .buttons {
+        flex-direction: column;
+        
+        button {
+            padding: 14px 20px;
         }
     }
 } 

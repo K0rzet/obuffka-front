@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Shoe, Gender } from '../../types/shoe';
 
@@ -39,10 +39,23 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
         shoe?.sizes ? shoe.sizes.join(',') : ''
     );
 
+    const [existingImages, setExistingImages] = useState<string[]>(shoe?.images || []);
+    const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
+    const [newImages, setNewImages] = useState<File[]>([]);
+
+    useEffect(() => {
+        if (shoe) {
+            setFormData(shoe);
+            setSelectedSizes(shoe.sizes.join(','));
+            setExistingImages(shoe.images || []);
+        }
+    }, [shoe]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const form = new FormData();
         
+        // Основные данные товара
         form.append('name', formData.name || '');
         form.append('description', formData.description || '');
         form.append('color', formData.color || '');
@@ -50,35 +63,33 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
         form.append('sizes', JSON.stringify(selectedSizes.split(',').map(Number).filter(Boolean)));
         form.append('price', String(formData.price || 0));
 
-        // Если есть существующие изображения, добавляем их
-        if (shoe?.images) {
-            form.append('existingImages', JSON.stringify(shoe.images));
+        // Работа с изображениями при редактировании
+        if (shoe) {
+            // Существующие изображения (которые остаются)
+            const remainingImages = existingImages.filter(img => !imagesToDelete.includes(img));
+            form.append('existingImages', JSON.stringify(remainingImages));
+            
+            // Изображения для удаления
+            if (imagesToDelete.length > 0) {
+                form.append('imagesToDelete', JSON.stringify(imagesToDelete));
+            }
         }
+
+        // Новые изображения
+        newImages.forEach(file => {
+            form.append('images', file);
+        });
 
         onSubmit(form);
     };
 
-    const handleImagesChange = (files: File[]) => {
-        // Добавляем новые файлы в FormData
-        const form = new FormData();
-        files.forEach(file => {
-            form.append('images', file);
-        });
+    const handleImageDelete = (imageUrl: string) => {
+        setExistingImages(prev => prev.filter(img => img !== imageUrl));
+        setImagesToDelete(prev => [...prev, imageUrl]);
+    };
 
-        // Добавляем остальные данные формы
-        form.append('name', formData.name || '');
-        form.append('description', formData.description || '');
-        form.append('color', formData.color || '');
-        form.append('gender', formData.gender || Gender.MALE);
-        form.append('sizes', JSON.stringify(selectedSizes.split(',').map(Number).filter(Boolean)));
-        form.append('price', String(formData.price || 0));
-
-        // Если есть существующие изображения, добавляем их
-        if (shoe?.images) {
-            form.append('existingImages', JSON.stringify(shoe.images));
-        }
-
-        onSubmit(form);
+    const handleNewImagesChange = (files: File[]) => {
+        setNewImages(files);
     };
 
     const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -91,6 +102,8 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
         <div className={styles.modalOverlay} onClick={handleOverlayClick}>
             <div className={styles.modalContent}>
                 <form className={styles.form} onSubmit={handleSubmit}>
+                    <h2>{shoe ? 'Редактировать товар' : 'Создать товар'}</h2>
+                    
                     <input
                         type="text"
                         placeholder="Название"
@@ -98,12 +111,14 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                         onChange={e => setFormData({ ...formData, name: e.target.value })}
                         required
                     />
+                    
                     <textarea
                         placeholder="Описание"
                         value={formData.description || ''}
                         onChange={e => setFormData({ ...formData, description: e.target.value })}
                         required
                     />
+                    
                     <div className={styles.colorSection}>
                         <label>Цвет:</label>
                         <div className={styles.colorGrid}>
@@ -122,6 +137,7 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                             ))}
                         </div>
                     </div>
+                    
                     <select
                         value={formData.gender}
                         onChange={e => setFormData({ ...formData, gender: e.target.value as Gender })}
@@ -130,6 +146,7 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                         <option value={Gender.MALE}>Мужское</option>
                         <option value={Gender.FEMALE}>Женское</option>
                     </select>
+                    
                     <input
                         type="text"
                         placeholder="Размеры (через запятую)"
@@ -137,6 +154,7 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                         onChange={e => setSelectedSizes(e.target.value)}
                         required
                     />
+                    
                     <input
                         type="number"
                         placeholder="Цена"
@@ -144,12 +162,37 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
                         onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
                         required
                     />
+
+                    {/* Существующие изображения при редактировании */}
+                    {shoe && existingImages.length > 0 && (
+                        <div className={styles.existingImages}>
+                            <label>Текущие изображения:</label>
+                            <div className={styles.imageGrid}>
+                                {existingImages.map((imageUrl, index) => (
+                                    <div key={index} className={styles.imageItem}>
+                                        <img src={imageUrl} alt={`Изображение ${index + 1}`} />
+                                        <button
+                                            type="button"
+                                            className={styles.deleteImageButton}
+                                            onClick={() => handleImageDelete(imageUrl)}
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                     
-                    <ImageUploader
-                        onChange={handleImagesChange}
-                        maxFiles={10}
-                        theme={window.Telegram?.WebApp?.colorScheme || 'light'}
-                    />
+                    {/* Загрузка новых изображений */}
+                    <div className={styles.newImages}>
+                        <label>{shoe ? 'Добавить новые изображения:' : 'Изображения:'}</label>
+                        <ImageUploader
+                            onChange={handleNewImagesChange}
+                            maxFiles={10}
+                            theme={window.Telegram?.WebApp?.colorScheme || 'light'}
+                        />
+                    </div>
 
                     <div className={styles.buttons}>
                         <button type="submit">{shoe ? 'Сохранить' : 'Создать'}</button>
