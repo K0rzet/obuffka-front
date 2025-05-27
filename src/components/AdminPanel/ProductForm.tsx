@@ -67,18 +67,37 @@ const ProductForm: React.FC<ProductFormProps> = observer(({ shoe, onSubmit, onCa
         if (shoe) {
             // Существующие изображения (которые остаются)
             const remainingImages = existingImages.filter(img => !imagesToDelete.includes(img));
-            form.append('existingImages', JSON.stringify(remainingImages));
+            
+            // Отправляем каждое существующее изображение как отдельное поле
+            remainingImages.forEach(image => {
+                form.append('existingImages', image);
+            });
             
             // Изображения для удаления
-            if (imagesToDelete.length > 0) {
-                form.append('imagesToDelete', JSON.stringify(imagesToDelete));
-            }
+            imagesToDelete.forEach(image => {
+                form.append('imagesToDelete', image);
+            });
         }
 
         // Новые изображения
         newImages.forEach(file => {
             form.append('images', file);
         });
+
+        console.log('Отправляемые данные:');
+        console.log('- Существующие изображения:', existingImages.filter(img => !imagesToDelete.includes(img)));
+        console.log('- К удалению:', imagesToDelete);
+        console.log('- Новые файлы:', newImages.map(f => f.name));
+
+        // Отладочная информация о FormData
+        console.log('FormData содержимое:');
+        for (let [key, value] of form.entries()) {
+            if (value instanceof File) {
+                console.log(`${key}: File(${value.name}, ${value.size} bytes)`);
+            } else {
+                console.log(`${key}: ${value}`);
+            }
+        }
 
         onSubmit(form);
     };

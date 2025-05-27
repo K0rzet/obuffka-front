@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import styles from './ShoeCard.module.scss';
 import { Shoe } from '../../types/shoe';
 import { getImageUrl } from '../../utils/imageUtils';
@@ -8,49 +8,51 @@ interface ShoeCardProps {
 }
 
 const ShoeCard: React.FC<ShoeCardProps> = ({ shoe }) => {
-    const scrollRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const scrollContainer = scrollRef.current;
-        if (!scrollContainer) return;
-
-        const handleWheel = (e: WheelEvent) => {
-            // Обрабатываем только горизонтальный скролл
-            if (Math.abs(e.deltaX) > 0) {
-                e.preventDefault();
-                scrollContainer.scrollLeft += e.deltaX;
-            }
-        };
-
-        scrollContainer.addEventListener('wheel', handleWheel);
-        return () => scrollContainer.removeEventListener('wheel', handleWheel);
-    }, []);
+    const mainImage = shoe.images && shoe.images.length > 0 ? shoe.images[0] : null;
+    const hasMultipleImages = shoe.images && shoe.images.length > 1;
 
     return (
         <div className={styles.card}>
-            {shoe.images && shoe.images.length > 0 && (
-                <div className={styles.imageScroller} ref={scrollRef}>
-                    {shoe.images.map((image, index) => (
-                        <img 
-                            key={index}
-                            src={getImageUrl(image)}
-                            alt={`${shoe.name} ${index + 1}`}
-                            className={styles.image}
-                            draggable={false}
-                        />
-                    ))}
+            {hasMultipleImages && (
+                <div className={styles.badge}>
+                    {shoe.images!.length} фото
                 </div>
             )}
-            <h3 className={styles.title}>{shoe.name}</h3>
-            <p className={styles.description}>{shoe.description}</p>
-            <div className={styles.info}>
-                <span className={styles.price}>{shoe.price.toLocaleString('ru-RU')} ₽</span>
-                <span className={styles.color}>{shoe.color}</span>
+            
+            <div className={styles.imageContainer}>
+                {mainImage ? (
+                    <img 
+                        src={getImageUrl(mainImage)}
+                        alt={shoe.name}
+                        className={styles.image}
+                    />
+                ) : (
+                    <div className={styles.noImage}>
+                        <span>Нет фото</span>
+                    </div>
+                )}
+                <div className={styles.imageOverlay}></div>
             </div>
-            <div className={styles.sizes}>
-                {shoe.sizes.map((size) => (
-                    <span key={size}>{size}</span>
-                ))}
+
+            <div className={styles.content}>
+                <div className={styles.brand}>
+                    {shoe.brand || 'Обувь'}
+                </div>
+                
+                <h3 className={styles.name}>{shoe.name}</h3>
+                
+                <div className={styles.details}>
+                    <div className={styles.size}>
+                        Размер: {shoe.sizes.join(', ')}
+                    </div>
+                    <div className={`${styles.condition} ${styles[shoe.condition || 'used']}`}>
+                        {shoe.condition === 'new' ? 'Новое' : 'Б/У'}
+                    </div>
+                </div>
+
+                <div className={styles.price}>
+                    {shoe.price.toLocaleString('ru-RU')} ₽
+                </div>
             </div>
         </div>
     );
