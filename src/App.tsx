@@ -76,7 +76,8 @@ const App: React.FC = observer(() => {
                     <Link to="/" title="Главная">
                         <RiHome2Line size={24} />
                     </Link>
-                    {(authStore.isAdmin || import.meta.env.DEV) && (
+                    {/* Показываем админ навигацию если пользователь админ или в режиме разработки */}
+                    {(authStore.user?.isAdmin || authStore.isAdmin || import.meta.env.DEV) && (
                         <>
                             <Link to="/admin" title="Админ панель">
                                 <RiSettings4Line size={24} />
@@ -116,6 +117,10 @@ const App: React.FC = observer(() => {
                                     {authStore.isTestMode && ' [Тестовый режим]'}
                                     <br />
                                     ID: {authStore.user.id}, isAdmin: {authStore.user.isAdmin ? 'true' : 'false'}
+                                    <br />
+                                    authStore.isAdmin: {authStore.isAdmin ? 'true' : 'false'}
+                                    <br />
+                                    Навигация админа: {(authStore.user?.isAdmin || authStore.isAdmin || import.meta.env.DEV) ? 'показана' : 'скрыта'}
                                 </>
                             ) : (
                                 'Пользователь не авторизован'
