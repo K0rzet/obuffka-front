@@ -4,6 +4,7 @@ import { shoesStore } from '../../store/ShoesStore';
 import { Gender, ShoeFilters } from '../../types/shoe';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import Portal from '../Portal/Portal';
 import styles from './FiltersModal.module.scss';
 
 interface FiltersModalProps {
@@ -46,8 +47,9 @@ const FiltersModal: React.FC<FiltersModalProps> = observer(({ onClose }) => {
     };
 
     return (
-        <div className={styles.overlay} onClick={onClose}>
-            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <Portal>
+            <div className={styles.overlay} onClick={onClose}>
+                <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.header}>
                     <h2>Фильтры</h2>
                     <button className={styles.closeButton} onClick={onClose}>×</button>
@@ -161,7 +163,7 @@ const FiltersModal: React.FC<FiltersModalProps> = observer(({ onClose }) => {
                     <button className={styles.apply} onClick={handleApply}>Применить</button>
                 </div>
             </div>
-        </div>
+        </Portal>
     );
 });
 

@@ -8,7 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 10000;
     padding: 20px;
     backdrop-filter: blur(4px);
 }
@@ -23,6 +23,7 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     border: 1px solid var(--tg-theme-hint-color, rgba(0, 0, 0, 0.1));
     animation: slideIn 0.3s ease-out;
+    position: relative;
 
     .header {
         display: flex;
