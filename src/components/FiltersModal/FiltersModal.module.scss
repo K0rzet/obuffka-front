@@ -444,3 +444,15 @@
         }
     }
 }
+.price {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 16px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @media (max-width: 480px) {
+      font-size: 15px;
+    }
+  }
