@@ -69,15 +69,6 @@
         object-fit: cover;
         object-position: center;
 
-        // Мобильная адаптация
-        @media (max-width: 768px) {
-            height: 200px;
-        }
-
-        @media (max-width: 480px) {
-            height: 180px;
-        }
-
         .imageOverlay {
             position: absolute;
             top: 0;
